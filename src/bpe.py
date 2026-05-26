@@ -150,6 +150,8 @@ class BPETokenizer:
         """
         동작 흐름
         1. ids를 바이트로 펼침
+            - skip_special이고 특수 토큰이면 continue
+            - 일반 byte면 그냥 추가
             - merge 토큰이라면 재귀처리
         
         2. 펼친 바이트 시퀀스를 bytes(...).decode("utf-8")를 호출
