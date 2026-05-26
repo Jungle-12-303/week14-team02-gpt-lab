@@ -54,9 +54,6 @@ class BPETokenizer:
             self.id_to_token[token_id] = token
             self.token_to_id[token] = token_id
             
-
-        raise NotImplementedError("_init_special_tokens를 구현하세요.")
-
     def get_pad_id(self):
         """padding 토큰 ID."""
         return SPECIAL_IDS[PAD_TOKEN]
