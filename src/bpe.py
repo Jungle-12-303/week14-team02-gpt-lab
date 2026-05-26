@@ -112,7 +112,32 @@ class BPETokenizer:
         4. bos, eos 추가 확인
         """
     
-        raise NotImplementedError("BPETokenizer.encode를 구현하세요.")
+        byte_values = list(text.encode("utf-8"))
+
+        ids = [self.token_to_id[bytes([b])] for b in byte_values]
+
+        for pair in self.merges:
+            if pair not in self.token_to_id:
+                continue
+
+            new_id = self.token_to_id[pair]
+            new_ids = []
+            i = 0
+
+            while i < len(ids):
+                if i < len(ids) - 1 and (ids[i], ids[i + 1]) == pair:
+                    new_ids.append(new_id)
+                    i += 2
+                else:
+                    new_ids.append(ids[i])
+                    i += 1
+            
+            ids = new_ids
+
+        if(add_bos_eos):
+            ids = [self.get_bos_id()] + ids + [self.get_eos_id()]
+
+        return ids
 
     def decode(self, ids: list[int], skip_special: bool = True) -> str:
         """
