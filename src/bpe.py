@@ -147,4 +147,13 @@ class BPETokenizer:
         - merge token은 원본 byte token까지 재귀적으로 펼칩니다.
         - byte를 하나씩 decode하지 말고, 마지막에 `bytes(...).decode("utf-8")`를 한 번만 호출합니다.
         """
+        """
+        동작 흐름
+        1. ids를 바이트로 펼침
+            - merge 토큰이라면 재귀처리
+        
+        2. 펼친 바이트 시퀀스를 bytes(...).decode("utf-8")를 호출
+
+        3. decode된 문자열을 반환
+        """
         raise NotImplementedError("BPETokenizer.decode를 구현하세요.")
