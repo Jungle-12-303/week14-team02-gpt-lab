@@ -45,7 +45,15 @@ class BPETokenizer:
         """
         for token, idx in SPECIAL_IDS.items():
             self.id_to_token[idx] = token
-            self.token_to_id[token] = idx            
+            self.token_to_id[token] = idx
+
+        
+        for byte in range(NUM_BYTES):
+            token_id = byte + 4
+            token = bytes([byte])
+            self.id_to_token[token_id] = token
+            self.token_to_id[token] = token_id
+            
 
         raise NotImplementedError("_init_special_tokens를 구현하세요.")
 
