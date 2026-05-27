@@ -72,53 +72,39 @@ class BPETokenizer:
         return SPECIAL_IDS[EOS_TOKEN]
 
     # 코퍼스에서 BPE merge rule과 vocabulary를 학습합니다.
-    # 코퍼스에서 들어오는 텍스트를 줄 단위로 나눠서 줄 경계에서 발생하는 merge 제거. (학습 텍스트는 NSMC 영화 리뷰이기 때문.)
     def train(self, corpus: str):
         self._init_special_tokens()
-
-        sequences = [
-            [BYTE_OFFSET + byte_val for byte_val in (line + "\n").encode("utf-8")]
-            for line in corpus.splitlines()
-            if line.strip()
-        ]
-
-        if not sequences and corpus:
-            sequences = [[BYTE_OFFSET + byte_val for byte_val in corpus.encode("utf-8")]]
+        ids = [BYTE_OFFSET + byte_val for byte_val in corpus.encode("utf-8")]
 
         while len(self.id_to_token) < self.vocab_size:
             pair_counts = {}
 
-            for ids in sequences:
-                for left, right in zip(ids, ids[1:]):
-                    pair = (left, right)
-                    pair_counts[pair] = pair_counts.get(pair, 0) + 1
+            for left, right in zip(ids, ids[1:]):
+                pair = (left, right)
+                pair_counts[pair] = pair_counts.get(pair, 0) + 1
 
             if not pair_counts:
                 break
 
-            best_pair = max(pair_counts.items(), key=lambda item: (item[1], item[0]))[0]
+            best_pair = max(pair_counts, key=pair_counts.get)
+            # best_pair = max(pair_counts.items(), key=lambda item: (item[1], item[0]))[0]
             new_token_id = len(self.id_to_token)
 
             self.id_to_token[new_token_id] = best_pair
             self.token_to_id[best_pair] = new_token_id
             self.merges.append(best_pair)
 
-            new_sequences = []
-            for ids in sequences:
-                merged_ids = []
-                i = 0
+            merged_ids = []
+            i = 0
+            while i < len(ids):
+                if i + 1 < len(ids) and (ids[i], ids[i + 1]) == best_pair:
+                    merged_ids.append(new_token_id)
+                    i += 2
+                else:
+                    merged_ids.append(ids[i])
+                    i += 1
 
-                while i < len(ids):
-                    if i + 1 < len(ids) and (ids[i], ids[i + 1]) == best_pair:
-                        merged_ids.append(new_token_id)
-                        i += 2
-                    else:
-                        merged_ids.append(ids[i])
-                        i += 1
-
-                new_sequences.append(merged_ids)
-
-            sequences = new_sequences
+            ids = merged_ids
 
     # vocabulary와 merge rule을 JSON 파일로 저장합니다.
     def save(self, path: str | Path):
