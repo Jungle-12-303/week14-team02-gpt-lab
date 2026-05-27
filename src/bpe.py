@@ -81,6 +81,29 @@ class BPETokenizer:
         - 새 token ID를 만들고, 시퀀스의 해당 pair를 새 ID로 치환합니다.
         - `self.merges`, `self.id_to_token`, `self.token_to_id`를 갱신합니다.
         """
+        byte_id_sequence = [
+            self.token_to_id[bytes([b])] 
+            for b in corpus.encode("utf-8")
+        ]
+
+        while len(self.id_to_token) < self.vocab_size:
+            pair_counts = {}
+
+            for i in range(len(byte_id_sequence) - 1):
+                pair = (byte_id_sequence[i], byte_id_sequence[i+1])
+                pair_counts[pair] = pair_counts.get(pair, 0) + 1
+
+            if not pair_counts:
+                break
+
+            best_pair = max(pair_counts, key=pair_counts.get)
+            best_count = pair_counts[best_pair]
+
+            if best_count < 2:
+                break
+
+
+
         raise NotImplementedError("BPETokenizer.train을 구현하세요.")
 
     def save(self, path: str | Path):
@@ -153,7 +176,7 @@ class BPETokenizer:
             self.token_to_id[token] = token_id
 
         self.merges = [tuple(pair) for pair in data["merges"]]
-        
+
     def encode(self, text: str, add_bos_eos: bool = False) -> list[int]:
         """
         TODO: 문자열을 token ID 리스트로 변환합니다.
