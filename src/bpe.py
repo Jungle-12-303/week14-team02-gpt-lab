@@ -8,6 +8,7 @@ UTF-8 byte-level BPE 토크나이저 과제 템플릿.
 """
 
 from pathlib import Path
+import json
 
 
 PAD_TOKEN = "<pad>"
@@ -88,7 +89,37 @@ class BPETokenizer:
 
         bytes와 tuple은 JSON에 바로 저장할 수 없으므로 type 정보를 함께 저장하세요.
         """
-        raise NotImplementedError("BPETokenizer.save를 구현하세요.")
+        data = {}
+        data["vocab_size"] = self.vocab_size
+        data["id_to_token"] = []
+
+        for token_id, token in self.id_to_token.items():
+            if isinstance(token, str):
+                item = {
+                    "id": token_id,
+                    "type": "str",
+                    "value": token,
+                }
+            elif isinstance(token, bytes):
+                item = {
+                    "id": token_id,
+                    "type": "bytes",
+                    "value": list(token),
+                }
+            elif isinstance(token, tuple):
+                item = {
+                    "id": token_id,
+                    "type": "tuple",
+                    "value": list(token),
+                }
+
+            data['id_to_token'].append(item)
+        
+        data["merges"] = [list(pair) for pair in self.merges]
+
+        path = Path(path)
+        with path.open("w", encoding="utf-8") as f: 
+            json.dump(data, f, ensure_ascii=False, indent=2)
 
     def load(self, path: str | Path):
         """
@@ -160,16 +191,16 @@ class BPETokenizer:
         """
         byte_values = []
 
-        for id in ids:
-            if skip_special and id in SPECIAL_IDS.values():
+        for token_id in ids:
+            if skip_special and token_id in SPECIAL_IDS.values():
                 continue
 
-            byte_values.extend(self.token_to_bytes(id))
+            byte_values.extend(self.token_to_bytes(token_id))
         
         return bytes(byte_values).decode("utf-8")
     
-    def token_to_bytes(self, id: int):
-        token = self.id_to_token[id]
+    def token_to_bytes(self, token_id: int):
+        token = self.id_to_token[token_id]
 
         # 일반 바이트
         if isinstance(token, bytes):
