@@ -112,6 +112,8 @@ class BPETokenizer:
                     "type": "tuple",
                     "value": list(token),
                 }
+            else:
+                raise TypeError(f"Unsupported token type: {type(token)}")
 
             data['id_to_token'].append(item)
         
