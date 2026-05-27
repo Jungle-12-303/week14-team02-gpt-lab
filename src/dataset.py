@@ -49,8 +49,8 @@ class GPTDataset(Dataset):
         start = idx * self.stride
         end = start + self.context_length
 
-        input_ids = torch.tensor(input_ids[start:end], dtype=torch.long)
-        target_ids = torch.tensor(input_ids[start + 1:end + 1], dtype=torch.long)
+        input_ids = torch.tensor(self.token_ids[start:end], dtype=torch.long)
+        target_ids = torch.tensor(self.token_ids[start + 1:end + 1], dtype=torch.long)
 
         return input_ids, target_ids
         
