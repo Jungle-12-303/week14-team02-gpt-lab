@@ -127,8 +127,33 @@ class BPETokenizer:
         """
         TODO: save()로 저장한 JSON 파일을 읽어 vocabulary와 merge rule을 복원합니다.
         """
-        raise NotImplementedError("BPETokenizer.load를 구현하세요.")
+        path = Path(path)
+        with path.open("r", encoding="utf-8") as f:
+            data = json.load(f)
 
+        self.vocab_size = data["vocab_size"]
+        self.id_to_token = {}
+        self.token_to_id = {}
+
+        for item in data["id_to_token"]:
+            token_id = item["id"]
+            token_type = item["type"]
+            value = item["value"]
+
+            if token_type == "str":
+                token = value
+            elif token_type == "bytes":
+                token = bytes(value)
+            elif token_type == "tuple":
+                token = tuple(value)
+            else:
+                raise ValueError(f"Unknown token type: {token_type}")
+            
+            self.id_to_token[token_id] = token
+            self.token_to_id[token] = token_id
+
+        self.merges = [tuple(pair) for pair in data["merges"]]
+        
     def encode(self, text: str, add_bos_eos: bool = False) -> list[int]:
         """
         TODO: 문자열을 token ID 리스트로 변환합니다.
