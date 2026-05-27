@@ -278,4 +278,4 @@ class BPETokenizer:
             return [token_id - BYTE_OFFSET]
         
         merge = self.id_to_token[token_id]
-        return self.expand(merge[0]) + self.expand(merge[1])
+        return self.token_to_bytes(merge[0]) + self.token_to_bytes(merge[1])
