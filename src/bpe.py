@@ -274,19 +274,8 @@ class BPETokenizer:
         return bytes(byte_values).decode("utf-8")
     
     def token_to_bytes(self, token_id: int):
-        token = self.id_to_token[token_id]
-
-        # 일반 바이트
-        if isinstance(token, bytes):
-            return list(token)
+        if token_id < BYTE_OFFSET + NUM_BYTES:
+            return [token_id - BYTE_OFFSET]
         
-        # merge된 튜플
-        if isinstance(token, tuple):
-            left, right = token
-            return self.token_to_bytes(left) + self.token_to_bytes(right)
-        
-        # 특수 토큰
-        if isinstance(token, str):
-            return list(token.encode("utf-8"))
-
-        return []
+        merge = self.id_to_token[token_id]
+        return self.expand(merge[0]) + self.expand(merge[1])
