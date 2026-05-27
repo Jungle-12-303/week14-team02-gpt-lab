@@ -86,6 +86,7 @@ class BPETokenizer:
             for b in corpus.encode("utf-8")
         ]
 
+        # vocab size보다 작을때 까지 반복
         while len(self.id_to_token) < self.vocab_size:
             pair_counts = {}
 
@@ -101,6 +102,12 @@ class BPETokenizer:
 
             if best_count < 2:
                 break
+
+            # 베스트 페어를 voca와 merge rules에 등록
+            new_token_id = len(self.id_to_token)
+            self.token_to_id[best_pair] = new_token_id
+            self.id_to_token[new_token_id] = best_pair
+            self.merges.append(best_pair)
 
 
 
