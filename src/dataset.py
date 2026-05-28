@@ -8,7 +8,8 @@ from torch.utils.data import DataLoader, Dataset
 class GPTDataset(Dataset):
     """
     token ID 리스트를 다음 토큰 예측용 input/target 쌍으로 자릅니다.
-
+    
+    tokenizer가 만든 숫자 리스트 (전체)
     예: token_ids=[10, 11, 12, 13], context_length=3
     - input:  [10, 11, 12]
     - target: [11, 12, 13]
@@ -22,9 +23,21 @@ class GPTDataset(Dataset):
     ):
         self.token_ids = token_ids
         self.context_length = context_length
+        # stride값이 들어왔는지 확인하고 없으면 context_length사용
         self.stride = stride if stride is not None else context_length
         # TODO: 만들 수 있는 학습 샘플 개수를 self._length에 저장하세요.
-        raise NotImplementedError("GPTDataset.__init__에서 self._length를 구현하세요.")
+
+        #start의 최대 시작점
+        max_start_index = len(self.token_ids) - self.context_length - 1
+
+        # 최대 시작점이 0보다 작으면면 0으로 설정
+        if max_start_index < 0:
+            self._length = 0
+
+        # sample개수 구하기
+        # dataset에 sample이 얼마나있는지 확인하고 epoch의 기준이 됨
+        else:
+            self._length = max_start_index // self.stride + 1
 
     def __len__(self) -> int:
         """TODO: 전체 샘플 개수를 반환합니다."""
