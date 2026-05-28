@@ -23,11 +23,19 @@ class InputEmbedding(nn.Module):
         context_length: int,
         drop_rate: float = 0.1,
     ):
+        # 상속한 부모 클래스 함수 호출 (nn.Module)
         super().__init__()
+        # token 하나를 얼만큼의 벡터로 설정할 건지
         self.emb_dim = emb_dim
         self.context_length = context_length
         # TODO: token_embedding, position_embedding, dropout을 정의하세요.
-        raise NotImplementedError("InputEmbedding.__init__을 구현하세요.")
+        
+        self.token_embedding = nn.Embedding(vocab_size, emb_dim)
+        # 위치를 벡터로 표현 (문장의 자리수 만큼)
+        self.position_embedding = nn.Embedding(context_length, emb_dim)
+        # dropout layer 생성
+        self.dropout = nn.Dropout(drop_rate)
+
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
