@@ -63,8 +63,8 @@ class GPTDataset(Dataset):
 
         # tensor로 바꿔서 반환
         return (
-        torch.tensor(input_ids, dtype=torch.long),
-        torch.tensor(target_ids, dtype=torch.long),
+            torch.tensor(input_ids, dtype=torch.long),
+            torch.tensor(target_ids, dtype=torch.long),
         )
 
 def create_dataloader(
@@ -77,4 +77,16 @@ def create_dataloader(
     num_workers: int = 0,
 ) -> DataLoader:
     """TODO: GPTDataset을 만들고 torch.utils.data.DataLoader로 감싸 반환합니다."""
+    dataset = GPTDataset(
+        token_ids=token_ids,
+        context_length=context_length,
+        stride=stride,
+    )
 
+    return DataLoader(
+        dataset,
+        batch_size=batch_size,
+        shuffle=shuffle,
+        drop_last=drop_last,
+        num_workers=num_workers,
+    )
