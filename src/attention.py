@@ -52,4 +52,40 @@ class MultiHeadAttention(nn.Module):
             causal_mask: True이면 미래 위치를 볼 수 없게 mask 처리
             return_attention_weights: True이면 attention weight도 함께 반환
         """
-        raise NotImplementedError("MultiHeadAttention.forward를 구현하세요.")
+        batch_size, seq_len, d_model, = x.shape
+
+        queries = self.W_query(x)
+        keys = self.W_key(x)
+        values = self.W_value(x)
+
+        queries = queries.view(batch_size, seq_len, self.n_heads, self.head_dim)
+        keys = keys.view(batch_size, seq_len, self.n_heads, self.head_dim)
+        values = values.view(batch_size, seq_len, self.n_heads, self.head_dim)
+
+        queries = queries.transpose(1, 2)
+        keys = keys.transpose(1, 2)
+        values = values.transpose(1, 2)
+
+        attn_scores = queries @ keys.transpose(2, 3)
+        attn_scores = attn_scores / (self.head_dim ** 0.5)
+
+        if causal_mask:
+            mask = torch.triu(
+                torch.ones(seq_len, seq_len, device=x.device, dtype=torch.bool),
+                diagonal=1,
+            )
+            attn_scores = attn_scores.masked_fill(mask, float("-inf"))
+
+        attn_weights = torch.softmax(attn_scores, dim=-1)
+        attn_weights_dropped = self.dropout(attn_weights)
+
+        context = attn_weights_dropped @ values
+
+        context = context.transpose(1, 2)
+        context = context.contiguous().view(batch_size, seq_len, d_model)
+
+        out = self.out_proj(context)
+
+        if return_attention_weights:
+            return out, attn_weights
+        return out
