@@ -41,17 +41,6 @@ class MultiHeadAttention(nn.Module):
         self.out_proj = nn.Linear(d_model, d_model)
         self.dropout = nn.Dropout(drop_rate)
 
-# Q/K/V 만들기
-# head 나누기
-# attention score 계산
-# causal mask 생성/적용
-# softmax
-# dropout
-# value 섞기
-# head 합치기
-# out_proj
-# return
-
     def forward(
         self,
         x: torch.Tensor,
