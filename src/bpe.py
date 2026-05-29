@@ -78,6 +78,9 @@ class BPETokenizer:
 
         sequences = [
             [BYTE_OFFSET + byte_val for byte_val in (line + "\n").encode("utf-8")]
+            # [[ 한 리뷰의 끝 처리 관련 ]]============================================================
+            # 한 리뷰의 시작/끝을 BOS/EOS 로 명시하여 진행할 경우 학습에서는 문장 끝을 \n 로 학습할 필요가 없음.
+            # [BYTE_OFFSET + byte_val for byte_val in line.encode("utf-8")]
             for line in corpus.splitlines()
             if line.strip()
         ]
@@ -96,7 +99,10 @@ class BPETokenizer:
             if not pair_counts:
                 break
 
-            best_pair = max(pair_counts.items(), key=lambda item: (item[1], item[0]))[0]
+            best_pair, best_count = max(pair_counts.items(), key=lambda item: (item[1], item[0]))
+            if best_count < 2:
+                break
+
             new_token_id = len(self.id_to_token)
 
             self.id_to_token[new_token_id] = best_pair

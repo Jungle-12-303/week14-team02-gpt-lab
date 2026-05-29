@@ -5,10 +5,9 @@ import torch
 import torch.nn as nn
 
 
+# GPT의 causal self-attention을 구현합니다.
 class MultiHeadAttention(nn.Module):
     """
-    GPT의 causal self-attention을 구현합니다.
-
     구현할 핵심:
     - Q/K/V projection
     - head 분리: (B, T, C) -> (B, n_heads, T, head_dim)
@@ -30,9 +29,14 @@ class MultiHeadAttention(nn.Module):
         self.d_model = d_model
         self.n_heads = n_heads
         self.head_dim = d_model // n_heads
-        # TODO: qkv projection, output projection, dropout을 정의하세요.
-        raise NotImplementedError("MultiHeadAttention.__init__을 구현하세요.")
+        # qkv projection, output projection, dropout을 정의하세요.
+        self.W_query = nn.Linear(d_model, d_model, bias=qkv_bias)
+        self.W_key = nn.Linear(d_model, d_model, bias=qkv_bias)
+        self.W_value = nn.Linear(d_model, d_model, bias=qkv_bias)
+        self.out_proj = nn.Linear(d_model, d_model)
+        self.dropout = nn.Dropout(drop_rate)
 
+    # multi-head attention forward를 구현합니다.
     def forward(
         self,
         x: torch.Tensor,
@@ -40,11 +44,44 @@ class MultiHeadAttention(nn.Module):
         return_attention_weights: bool = False,
     ) -> torch.Tensor | tuple[torch.Tensor, torch.Tensor]:
         """
-        TODO: multi-head attention forward를 구현합니다.
-
         Args:
             x: (batch_size, seq_len, d_model)
             causal_mask: True이면 미래 위치를 볼 수 없게 mask 처리
             return_attention_weights: True이면 attention weight도 함께 반환
         """
-        raise NotImplementedError("MultiHeadAttention.forward를 구현하세요.")
+        batch_size, seq_len, _ = x.shape
+
+        keys = self.W_key(x)
+        queries = self.W_query(x)
+        values = self.W_value(x)
+
+        keys = keys.view(batch_size, seq_len, self.n_heads, self.head_dim)
+        queries = queries.view(batch_size, seq_len, self.n_heads, self.head_dim)
+        values = values.view(batch_size, seq_len, self.n_heads, self.head_dim)
+
+        keys = keys.transpose(1, 2)
+        queries = queries.transpose(1, 2)
+        values = values.transpose(1, 2)
+
+        attn_scores = queries @ keys.transpose(2, 3)
+
+        if causal_mask:
+            mask_bool = torch.triu(
+                torch.ones(seq_len, seq_len, dtype=torch.bool, device=x.device),
+                diagonal=1,
+            )
+            attn_scores = attn_scores.masked_fill(mask_bool, -torch.inf)
+
+        attn_weights = torch.softmax(attn_scores / (self.head_dim ** 0.5), dim=-1,)
+        attn_weights = self.dropout(attn_weights)
+
+        context_vec = attn_weights @ values
+        context_vec = context_vec.transpose(1, 2)
+        context_vec = context_vec.contiguous().view(batch_size, seq_len, self.d_model)
+
+        context_vec = self.out_proj(context_vec)
+
+        if return_attention_weights:
+            return context_vec, attn_weights
+
+        return context_vec
