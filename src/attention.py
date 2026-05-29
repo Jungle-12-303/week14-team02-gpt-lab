@@ -33,15 +33,24 @@ class MultiHeadAttention(nn.Module):
         self.n_heads = n_heads
         # head하나의 차원 (출력 차원에 맞도록)
         self.head_dim = d_model // n_heads
-        # token vactor의 차원
-        self.d_model = d_model
         # TODO: qkv projection, output projection, dropout을 정의하세요.
         
         self.W_query = nn.Linear(d_model, d_model, bias=qkv_bias)
         self.W_key = nn.Linear(d_model, d_model, bias=qkv_bias)
         self.W_value = nn.Linear(d_model, d_model, bias=qkv_bias)
         self.out_proj = nn.Linear(d_model, d_model)
-        self.dropout = nn.Linear(drop_rate)
+        self.dropout = nn.Dropout(drop_rate)
+
+# Q/K/V 만들기
+# head 나누기
+# attention score 계산
+# causal mask 생성/적용
+# softmax
+# dropout
+# value 섞기
+# head 합치기
+# out_proj
+# return
 
     def forward(
         self,
@@ -57,4 +66,52 @@ class MultiHeadAttention(nn.Module):
             causal_mask: True이면 미래 위치를 볼 수 없게 mask 처리
             return_attention_weights: True이면 attention weight도 함께 반환
         """
-        raise NotImplementedError("MultiHeadAttention.forward를 구현하세요.")
+        batch_size, sequence_length, d_model = x.shape
+        keys = self.W_key(x)
+        queries = self.W_query(x)
+        values = self.W_value(x)
+
+        # tensor의 shape 바꾸기
+        # (B, T, C) -> (B, T, n_heads, head_dim) -> (B, n_heads, T, head_dim)
+        keys = keys.view(
+            batch_size, sequence_length, self.n_heads, self.head_dim
+        ).transpose(1, 2)
+
+        queries = queries.view(
+            batch_size, sequence_length, self.n_heads, self.head_dim
+        ).transpose(1, 2)
+
+        values = values.view(
+            batch_size, sequence_length, self.n_heads, self.head_dim
+        ).transpose(1, 2)
+
+        # 각 query와 모든 key의 점곱으로 attention 원점수 구하기
+        attention_scores = queries @ keys.transpose(-2, -1)
+        attention_scores = attention_scores / (self.head_dim ** 0.5)
+
+        # causal mask=True이면 미래 토큰을 볼 수 없도록 처리 
+        if causal_mask:
+            mask = torch.triu(
+                torch.ones(sequence_length, sequence_length, device=x.device),
+                diagonal=1,
+            ).bool()
+            attention_scores = attention_scores.masked_fill(mask, float("-inf"))
+
+        # attention score를 softmax로 바꾼 뒤, attention weight에 비율을 곱해서 더함
+        attention_weights = torch.softmax(attention_scores, dim=-1)
+        attention_weights = self.dropout(attention_weights)
+        context = attention_weights @ values
+
+        # head별 context를 다시 하나의 d_model 벡터로 합침
+        context = context.transpose(1, 2).contiguous()
+        context = context.view(batch_size, sequence_length, d_model)
+
+        output = self.out_proj(context)
+
+        # attention weight 출력
+        if return_attention_weights:
+            return output, attention_weights
+
+        return output
+
+        
