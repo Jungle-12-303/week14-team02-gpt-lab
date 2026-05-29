@@ -43,4 +43,47 @@ class InputEmbedding(nn.Module):
         Returns:
             (batch_size, seq_len, emb_dim)
         """
-        raise NotImplementedError("InputEmbedding.forward를 구현하세요.")
+        # 1. broadcasting
+        seq_len = x.shape[1]
+        # device=x.device 입력 x가 GPU에 있으면 positions도 GPU에서 만든다.
+        # x랑 positions의 디바이스가 다르면 embedding 계산이나 덧셈에서 device mismatch 에러가 날 수 있다.
+        positions = torch.arange(seq_len, device=x.device)
+
+        token_emb = self.token_embedding(x)
+        pos_emb = self.position_embedding(positions)
+
+        return self.dropout(token_emb + pos_emb)
+
+        # 2. position을 batch size로 명시적 확장
+        batch_size, seq_len = x.shape
+        positions = torch.arange(seq_len, device=x.device)
+        positions = positions.unsqueeze(0).expand(batch_size, seq_len)
+
+        token_emb = self.token_embedding(x)
+        pos_emb = self.position_embedding(positions)
+
+        return self.dropout(token_emb + pos_emb)
+
+        # 3. position id를 __init__ 에서 buffer로 미리 만들어두기
+        # __init__에 추가해야 되는 코드
+        self.register_buffer("position_ids", torch.arange(self.context_length).unsqueeze(0), persistent=False)
+
+        # forward
+        seq_len = x.shape[1]
+        positions = self.position_ids[:, :seq_len]
+
+        token_emb = self.token_embedding(x)
+        pos_emb = self.position_embedding(positions)
+
+        return self.dropout(token_emb + pos_emb)
+
+        # 4. 생성용까지 고려해 position을 인자로 받기
+        batch_size, seq_len = x.shape
+
+        if position_ids is None:
+            position_ids = torch.arange(seq_len, device=x.device).unsqueeze(0)
+
+        token_emb = self.token_embedding(x)
+        pos_emb = self.position_embedding(position_ids)
+
+        return self.dropout(token_emb + pos_emb)
