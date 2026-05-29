@@ -31,7 +31,12 @@ class MultiHeadAttention(nn.Module):
         self.n_heads = n_heads
         self.head_dim = d_model // n_heads
         # TODO: qkv projection, output projection, dropout을 정의하세요.
-        raise NotImplementedError("MultiHeadAttention.__init__을 구현하세요.")
+        self.W_query = nn.Linear(d_model, d_model, bias=qkv_bias)
+        self.W_key = nn.Linear(d_model, d_model, bias=qkv_bias)
+        self.W_value = nn.Linear(d_model, d_model, bias=qkv_bias)
+
+        self.out_proj = nn.Linear(d_model, d_model)
+        self.dropout = nn.Dropout(drop_rate)
 
     def forward(
         self,
