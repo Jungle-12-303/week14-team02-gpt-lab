@@ -68,7 +68,11 @@ class TransformerBlock(nn.Module):
     ):
         super().__init__()
         # TODO: attention, ffn, layernorm, dropout을 정의하세요.
-        raise NotImplementedError("TransformerBlock.__init__을 구현하세요.")
+        self.attention = MultiHeadAttention(d_model=d_model, n_heads=n_heads, drop_rate=drop_rate, qkv_bias=qkv_bias)
+        self.ffn = FeedForward(d_model=d_model, dropout=drop_rate)
+        self.norm1 = LayerNorm(normalized_shape=d_model)
+        self.norm2 = LayerNorm(normalized_shape=d_model)
+        self.dropout = nn.Dropout(drop_rate)
 
     def forward(self, x: torch.Tensor, causal_mask: bool = True) -> torch.Tensor:
         """TODO: attention과 ffn을 residual connection으로 연결합니다."""
