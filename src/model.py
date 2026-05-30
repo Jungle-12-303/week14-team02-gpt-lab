@@ -17,13 +17,21 @@ class LayerNorm(nn.Module):
 
     def __init__(self, normalized_shape: int, eps: float = 1e-5):
         super().__init__()
+        # 학습되는 값들
         self.gamma = nn.Parameter(torch.ones(normalized_shape))
         self.beta = nn.Parameter(torch.zeros(normalized_shape))
         self.eps = eps
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """TODO: 마지막 차원의 평균과 분산으로 정규화한 뒤 gamma/beta를 적용합니다."""
-        raise NotImplementedError("LayerNorm.forward를 구현하세요.")
+        # token의 벡터 값 크기를 안정화(평균 0, 분산1 근처로 맞춘 뒤 gamma, beta로 조절)
+        # 평균 구하기기(마지막 차원)
+        mean = x.mean(dim=-1, keepdim=True)
+        # 분산 구하기
+        var = x.var(dim=-1, keepdim=True, unbiased=False)
+        # 정규화를 통해 0과 1에 가까운 형태로 만듦
+        x_norm = (x - mean) / torch.sqrt(var + self.eps)
+        return self.gamma * x_norm + self.beta
 
 
 class GELU(nn.Module):
