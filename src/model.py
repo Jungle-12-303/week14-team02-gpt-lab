@@ -26,7 +26,7 @@ class LayerNorm(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """TODO: 마지막 차원의 평균과 분산으로 정규화한 뒤 gamma/beta를 적용합니다."""
         # token의 벡터 값 크기를 안정화(평균 0, 분산1 근처로 맞춘 뒤 gamma, beta로 조절)
-        # 평균 구하기기(마지막 차원)
+        # 평균 구하기(마지막 차원)
         mean = x.mean(dim=-1, keepdim=True)
         # 분산 구하기
         var = x.var(dim=-1, keepdim=True, unbiased=False)
@@ -125,7 +125,33 @@ class GPTModel(nn.Module):
         super().__init__()
         self.config = config
         # TODO: embedding, blocks, final layernorm, lm_head를 정의하세요.
-        raise NotImplementedError("GPTModel.__init__을 구현하세요.")
+        self.embedding = InputEmbedding(
+            # 토큰 vocab size
+            vocab_size=config["vocab_size"],
+            # embedding 차원
+            emb_dim=config["emb_dim"],
+            # 시퀀스 길이
+            context_length=config["context_length"],
+            # dropout rate
+            drop_rate=config["drop_rate"],
+        )
+
+        self.blocks = nn.Sequential(
+            *[
+                TransformerBlock(
+                    d_model=config["emb_dim"],
+                    n_heads=config["n_heads"],
+                    drop_rate=config["drop_rate"],
+                    qkv_bias=config["qkv_bias"],
+                )
+                for _ in range(config["n_layers"])
+            ]
+        )
+
+        # transformer을 거친 결과 정규화
+        self.result_norm = LayerNorm(config["emb_dim"])
+        # 후보 점수로 바꿔주는 선형 변환 (logits)
+        self.lm_head = nn.Linear(config["emb_dim"], config["vocab_size"], bias=False)
 
     def forward(
         self,
@@ -139,9 +165,23 @@ class GPTModel(nn.Module):
             targets가 None이면 logits
             targets가 있으면 (loss, logits)
         """
-        raise NotImplementedError("GPTModel.forward를 구현하세요.")
+        x = self.embedding(idx)
+        x = self.blocks(x)
+        x = self.result_norm(x)
+        logits = self.lm_head(x)
 
+        # target 없으면 예측만하고 있으면 loss까지 계산
+        if targets is None:
+            return logits
 
+        # 역전파에 사용할 정답 token loss계산
+        loss = F.cross_entropy(
+            logits.view(-1, logits.size(-1)),
+            targets.view(-1),
+        )
+
+        return loss, logits
+ 
 def generate_text_simple(
     model: GPTModel,
     idx: torch.Tensor,
