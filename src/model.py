@@ -27,7 +27,7 @@ class LayerNorm(nn.Module):
         """TODO: 마지막 차원의 평균과 분산으로 정규화한 뒤 gamma/beta를 적용합니다."""
         mean = x.mean(dim=-1, keepdim=True)
         var = x.var(dim=-1, keepdim=True, unbiased=False)
-        norm_x = (x - mean) / torch.sort(var + self.eps)
+        norm_x = (x - mean) / torch.sqrt(var + self.eps)
         return self.gamma * norm_x + self.beta
 
 
@@ -104,25 +104,25 @@ class GPTModel(nn.Module):
             drop_rate=config["drop_rate"],
         )
 
-        # self.blocks = nn.Sequential(
-        #     *[TransformerBlock(
-        #         d_model=config["emb_dim"],
-        #         n_heads=config["n_heads"],
-        #         drop_rate=config["drop_rate"],
-        #         qkv_bias=config["qkv_bias"],
-        #     ) for _ in range(config["n_layers"])]
-        # )
-
-        # forward에서 causal_mask를 명시적으로 넘기기 위해 추천
-        self.blocks = nn.ModuleList([
-            TransformerBlock(
+        self.blocks = nn.Sequential(
+            *[TransformerBlock(
                 d_model=config["emb_dim"],
                 n_heads=config["n_heads"],
                 drop_rate=config["drop_rate"],
                 qkv_bias=config["qkv_bias"],
-            )
-            for _ in range(config["n_layers"])
-        ])
+            ) for _ in range(config["n_layers"])]
+        )
+
+        # forward에서 causal_mask를 명시적으로 넘기기 위해 추천
+        # self.blocks = nn.ModuleList([
+        #     TransformerBlock(
+        #         d_model=config["emb_dim"],
+        #         n_heads=config["n_heads"],
+        #         drop_rate=config["drop_rate"],
+        #         qkv_bias=config["qkv_bias"],
+        #     )
+        #     for _ in range(config["n_layers"])
+        # ])
 
         self.final_norm = LayerNorm(config["emb_dim"])
         self.lm_head = nn.Linear(config["emb_dim"], config["vocab_size"])
@@ -139,8 +139,23 @@ class GPTModel(nn.Module):
             targets가 None이면 logits
             targets가 있으면 (loss, logits)
         """
-        raise NotImplementedError("GPTModel.forward를 구현하세요.")
-
+        x = self.embedding(idx)
+        # Sequential로 생성시 직접 호출
+        x = self.blocks(x)
+        # ModuleList로 생성시 직접 호출 불가
+        # for block in self.blocks:
+        #     x = block(x, causal_mask=True)
+        x = self.final_norm(x)
+        logits = self.lm_head(x)
+        
+        if targets is not None:
+            loss = nn.functional.cross_entropy(
+                logits.reshape(-1, logits.size(-1)),
+                targets.reshape(-1),
+            )
+            return (loss, logits)
+        
+        return logits
 
 def generate_text_simple(
     model: GPTModel,
