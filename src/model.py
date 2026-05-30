@@ -106,8 +106,17 @@ class TransformerBlock(nn.Module):
 
     def forward(self, x: torch.Tensor, causal_mask: bool = True) -> torch.Tensor:
         """TODO: attention과 ffn을 residual connection으로 연결합니다."""
-        raise NotImplementedError("TransformerBlock.forward를 구현하세요.")
+        attention_result = self.attention(
+            self.layerNorm1(x),
+            causal_mask=causal_mask,
+        )
+        # 일반 attention결과에 dropput 적용
+        x = x + self.drop(attention_result)
 
+        ffn_result = self.ffn(self.layerNorm2(x))
+        x = x + ffn_result
+
+        return x
 
 class GPTModel(nn.Module):
     """InputEmbedding -> TransformerBlock N개 -> LayerNorm -> LM head."""
