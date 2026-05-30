@@ -49,6 +49,7 @@ class FeedForward(nn.Module):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """TODO: FeedForward 네트워크를 통과시킵니다."""
+        return self.layers(x)
         raise NotImplementedError("FeedForward.forward를 구현하세요.")
 
 
