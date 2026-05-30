@@ -189,4 +189,15 @@ def generate_text_simple(
     context_size: int,
 ) -> torch.Tensor:
     """TODO: greedy 방식으로 max_new_tokens만큼 다음 토큰을 이어 붙입니다."""
-    raise NotImplementedError("generate_text_simple을 구현하세요.")
+    # 가장 큰 점수의 token 구하기
+    for _ in range(max_new_tokens):
+        # 최대 context길이만큼 자르기
+        idx_cond = idx[:, -context_size:]
+        logits = model(idx_cond)
+        # token점수 계산
+        logits = logits[:, -1, :]
+        # 마지막 token 위치 예측
+        idx_next = torch.argmax(logits, dim=-1, keepdim=True)
+        idx = torch.cat((idx, idx_next), dim=1)
+
+    return idx
