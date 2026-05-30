@@ -3,6 +3,7 @@
 
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 try:
     from .attention import MultiHeadAttention
@@ -39,8 +40,15 @@ class GELU(nn.Module):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """TODO: tanh 근사식 또는 torch 연산으로 GELU를 구현합니다."""
-        raise NotImplementedError("GELU.forward를 구현하세요.")
+        return F.gelu(x)
 
+    # 근사식으로 표현
+    #   return 0.5 * x * (
+    #     1.0 + torch.tanh(
+    #         torch.sqrt(torch.tensor(2.0 / torch.pi, device=x.device))
+    #         * (x + 0.044715 * torch.pow(x, 3))
+    #     )
+    # )
 
 class FeedForward(nn.Module):
     """Transformer FFN: Linear -> GELU -> Linear -> Dropout."""
