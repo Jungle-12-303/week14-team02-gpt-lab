@@ -5,9 +5,9 @@ import matplotlib.pyplot as plt
 import torch
 
 try:
-    from .model import GPTModel
+    from .model import GPTModel, generate_text_simple
 except ImportError:
-    from model import GPTModel
+    from model import GPTModel, generate_text_simple
 
 
 def calc_loss_batch(
@@ -115,7 +115,7 @@ def generate(
 
         if eos_id is not None and (idx_next == eos_id).all():
             break
-        
+
         idx = torch.cat((idx, idx_next), dim=1)
     
     return idx
@@ -133,7 +133,28 @@ def generate_and_print_sample(
     top_k: int | None = 40,
 ) -> None:
     """TODO: start_context를 encode하고 generate 후 decode하여 출력합니다."""
-    raise NotImplementedError("generate_and_print_sample을 구현하세요.")
+    was_training = model.training
+    model.eval()
+
+    encoded = tokenizer.encode(start_context)
+    encoded = torch.tensor(encoded, dtype=torch.long, device=device).unsqueeze(0)
+
+    with torch.no_grad():
+        token_ids = generate(
+            model=model, 
+            idx=encoded, 
+            max_new_tokens=max_new_tokens, 
+            context_size=context_size,
+            temperature=temperature,
+            top_k=top_k,
+        )
+    
+    decoded_text = tokenizer.decode(token_ids.squeeze)
+    print(decoded_text.replace("\n", " "))
+
+    if was_training:
+        model.train()
+
 
 
 def train_model(
