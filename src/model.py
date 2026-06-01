@@ -193,11 +193,13 @@ def generate_text_simple(
     for _ in range(max_new_tokens):
         # 최대 context길이만큼 자르기
         idx_cond = idx[:, -context_size:]
-        logits = model(idx_cond)
         # token점수 계산
-        logits = logits[:, -1, :]
+        logits = model(idx_cond)
         # 마지막 token 위치 예측
+        logits = logits[:, -1, :]
+        # 다음 token id 고르기
         idx_next = torch.argmax(logits, dim=-1, keepdim=True)
+        # 기존토큰 뒤에 고른 토큰 붙이기
         idx = torch.cat((idx, idx_next), dim=1)
 
     return idx
