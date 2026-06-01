@@ -3,6 +3,7 @@
 
 import matplotlib.pyplot as plt
 import torch
+from pathlib import Path
 
 try:
     from .model import GPTModel, generate_text_simple
@@ -149,12 +150,34 @@ def generate_and_print_sample(
             top_k=top_k,
         )
     
-    decoded_text = tokenizer.decode(token_ids.squeeze)
+    decoded_text = tokenizer.decode(token_ids.squeeze(0).tolist())
     print(decoded_text.replace("\n", " "))
 
     if was_training:
         model.train()
 
+def evaluate_model(
+    model: GPTModel, 
+    train_loader, 
+    val_loader, 
+    device: torch.device, 
+    eval_iter: int
+) -> tuple[float, float]:
+    was_training = model.training
+
+    model.eval()
+    with torch.no_grad():
+        train_loss = calc_loss_loader(
+            train_loader, model, device, num_batches=eval_iter
+        )
+        val_loss = calc_loss_loader(
+            val_loader, model, device, num_batches=eval_iter
+        )
+    
+    if was_training:
+        model.train()
+
+    return train_loss, val_loss
 
 
 def train_model(
@@ -173,7 +196,61 @@ def train_model(
     global_step: int = 0,
 ) -> list[float]:
     """TODO: 사전 학습 루프를 구현하고 epoch별 train loss 리스트를 반환합니다."""
-    raise NotImplementedError("train_model을 구현하세요.")
+    if eval_freq <= 0:
+        raise ValueError("eval_freq must be positive")
+    if eval_iter <= 0:
+        raise ValueError("eval_iter must be positive")
+    if ckpt_freq is not None and ckpt_freq <= 0:
+        raise ValueError("ckpt_freq must be positive")
+    
+    model.to(device)
+
+    train_losses, val_losses, track_tokens_seen = [], [], []
+    tokens_seen = 0
+
+
+    for epoch in range(start_epoch, start_epoch + num_epochs):
+        model.train()
+
+        for input_batch, target_batch in train_loader:
+            optimizer.zero_grad()
+
+            loss = calc_loss_batch(
+                input_batch, target_batch, model, device
+            )
+            loss.backward()
+            optimizer.step()
+
+            tokens_seen += input_batch.numel()
+            global_step += 1
+
+            if global_step % eval_freq == 0:
+                train_loss, val_loss = evaluate_model(
+                    model, train_loader, val_loader, device, eval_iter
+                )
+                train_losses.append(train_loss)
+                val_losses.append(val_loss)
+                track_tokens_seen.append(tokens_seen)
+
+                print(f"에포크 {epoch+1} (Step {global_step:06d}): "
+                    f"훈련 손실 {train_loss:.3f}, "
+                    f"검증 손실 {val_loss:.3f}"
+                )
+            
+            if ckpt_freq is not None and global_step % ckpt_freq == 0:
+                checkpoint_dir = Path("checkpoints")
+                checkpoint_dir.mkdir(exist_ok=True)
+
+                checkpoint_path = checkpoint_dir / f"model_step_{global_step}.pt"
+
+                save_checkpoint(model, optimizer, epoch, global_step, str(checkpoint_path))
+        
+        generate_and_print_sample(
+            model, tokenizer, device, start_context, context_size=model.config["context_length"],
+        )
+
+    # return train_losses, val_losses, track_tokens_seen로 반환할꺼면 리턴 타입 수정 필요
+    return train_losses
 
 
 def plot_losses(train_losses: list[float], val_losses: list[float] | None = None) -> None:
