@@ -71,8 +71,13 @@ def load_checkpoint(
     device: torch.device,
 ) -> tuple[int, int]:
     """TODO: torch.load로 checkpoint를 읽어 model/optimizer 상태를 복원합니다."""
-    raise NotImplementedError("load_checkpoint를 구현하세요.")
+    checkpoint = torch.load(path, map_location=device)
 
+    model.load_state_dict(checkpoint["model_state_dict"])
+
+    optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
+
+    return checkpoint["epoch"], checkpoint["global_step"]
 
 def generate(
     model: GPTModel,
