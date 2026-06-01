@@ -83,8 +83,14 @@ def load_checkpoint(
     device: torch.device,
 ) -> tuple[int, int]:
     """TODO: torch.load로 checkpoint를 읽어 model/optimizer 상태를 복원합니다."""
-    raise NotImplementedError("load_checkpoint를 구현하세요.")
+    checkpoint = torch.load(path, map_location=device)
+    
+    model.load_state_dict(checkpoint["model_state_dict"])
 
+    if optimizer is not None:
+        optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
+
+    return checkpoint["epoch"], checkpoint["global_step"]    
 
 def generate(
     model: GPTModel,
@@ -95,9 +101,7 @@ def generate(
     top_k: int | None = None,
     eos_id: int | None = None,
 ) -> torch.Tensor:
-    """TODO: temperature와 top-k 샘플링을 지원하는 생성 함수를 구현합니다."""
-    raise NotImplementedError("generate를 구현하세요.")
-
+            
 
 def generate_and_print_sample(
     model: GPTModel,
