@@ -101,7 +101,41 @@ def generate(
     top_k: int | None = None,
     eos_id: int | None = None,
 ) -> torch.Tensor:
-            
+    for _ in range(max_new_tokens):
+        # 마지막 context_size만 자름
+        idx_cond = idx[:, -context_size:]
+
+        with torch.no_grad():
+            logits = model(idx_cond)
+        
+        # 마지막 위치 logits만 꺼냄
+        logits = logits[:, -1, :]
+
+        if top_k is not None:
+            # top_k가 vocab_size보다 크지 않도록 설정
+            top_k = min(top_k, logits.size(-1))
+            top_logits, _ = torch.topk(logits, top_k)
+            min_val = top_logits[:, -1].unsqueeze(-1)
+            logits = torch.where(
+                logits < min_val,
+                torch.tensor(float("-inf"), device=logits.device),
+                logits,
+            )
+
+        if temperature > 0:
+            logits = logits / temperature
+            probs = torch.softmax(logits, dim=-1)
+            idx_next = torch.multinomial(probs, num_samples=1)
+        else:
+            idx_next = torch.argmax(logits, dim=-1, keepdim=True)
+
+        # 다음 토큰이 모두 eos 토큰이면 생성 중단
+        if eos_id is not None and torch.all(idx_next == eos_id):
+            break
+
+        # idx뒤에 다음 토큰 idx_next 붙임
+        idx = torch.cat((idx, idx_next), dim=1)
+    return idx
 
 def generate_and_print_sample(
     model: GPTModel,
