@@ -150,7 +150,6 @@ def generate_and_print_sample(
     top_k: int | None = 40,
 ) -> None:
     """TODO: start_context를 encode하고 generate 후 decode하여 출력합니다."""
-    
     # 생성시에는 dropout 끄기
     model.eval()
     
@@ -175,21 +174,85 @@ def generate_and_print_sample(
 
 def train_model(
     model: GPTModel,
+    # 훈련 batch data
     train_loader,
+    # 검증 batch data
     val_loader,
     optimizer: torch.optim.Optimizer,
     device: torch.device,
     num_epochs: int,
+    # 몇 step마다 train/val loss를 평가할지
     eval_freq: int,
+    # 몇 batch만 볼지
     eval_iter: int,
     start_context: str,
     tokenizer,
+    # checkpoint를 저장할 주기
     ckpt_freq: int | None = None,
     start_epoch: int = 0,
     global_step: int = 0,
 ) -> list[float]:
     """TODO: 사전 학습 루프를 구현하고 epoch별 train loss 리스트를 반환합니다."""
-    raise NotImplementedError("train_model을 구현하세요.")
+    # 평가한 손실값 기록 리스트
+    train_losses = []
+    val_losses = []
+
+    model.to(device)
+    model.train()
+
+    # 전체 데이터셋 반복
+    for epoch in range(start_epoch, num_epochs):
+        for input_batch, target_batch in train_loader:
+            # batch마다 gradient 초기화
+            optimizer.zero_grad()
+
+            # loss계산
+            loss = calc_loss_batch(input_batch, target_batch, model, device)
+
+            # gradient 계산
+            loss.backward()
+            # weight 업데이트
+            optimizer.step()
+
+            global_step += 1
+
+            if global_step % eval_freq == 0:
+                # 평균 loss계산
+                train_loss = calc_loss_loader(
+                    train_loader, model, device, num_batches=eval_iter
+                )
+                val_loss = calc_loss_loader(
+                    val_loader, model, device, num_batches=eval_iter
+                )
+                # loss 결과 기록
+                train_losses.append(train_loss)
+                val_losses.append(val_loss)
+
+                print(
+                    f"Epoch {epoch + 1}, Step {global_step}: "
+                    f"Train loss {train_loss:.3f}, Val loss {val_loss:.3f}"
+                )
+
+                # 다음 예측 token 샘플 출력
+                generate_and_print_sample(
+                    model=model,
+                    tokenizer=tokenizer,
+                    device=device,
+                    start_context=start_context,
+                    context_size=model.config["context_length"],
+                )
+                
+            # checkpoint 저장
+            if ckpt_freq is not None and global_step % ckpt_freq == 0:
+                save_checkpoint(
+                    model=model,
+                    optimizer=optimizer,
+                    epoch=epoch,
+                    global_step=global_step,
+                    path=f"checkpoint_step_{global_step}.pt",
+                )
+
+    return train_losses, val_loss
 
 
 def plot_losses(train_losses: list[float], val_losses: list[float] | None = None) -> None:
