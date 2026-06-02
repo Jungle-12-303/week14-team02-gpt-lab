@@ -151,6 +151,7 @@ def generate_and_print_sample(
 ) -> None:
     """TODO: start_context를 encode하고 generate 후 decode하여 출력합니다."""
     # 생성시에는 dropout 끄기
+    prev_training_mode = model.training
     model.eval()
     
     encoded = tokenizer.encode(start_context)
@@ -170,7 +171,8 @@ def generate_and_print_sample(
     print(generated_text)
 
     # 학습시 dropout 켜기
-    model.train()
+    if prev_training_mode:
+        model.train()
 
 def train_model(
     model: GPTModel,
@@ -252,7 +254,7 @@ def train_model(
                     path=f"checkpoint_step_{global_step}.pt",
                 )
 
-    return train_losses, val_loss
+    return train_losses
 
 
 def plot_losses(train_losses: list[float], val_losses: list[float] | None = None) -> None:
