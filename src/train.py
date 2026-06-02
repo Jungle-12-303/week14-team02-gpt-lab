@@ -141,15 +141,37 @@ def generate_and_print_sample(
     model: GPTModel,
     tokenizer,
     device: torch.device,
+    # 생성 시작 문자열
     start_context: str,
+    # 새 토큰을 생성할 개수
     max_new_tokens: int = 50,
     context_size: int = 256,
     temperature: float = 0.8,
     top_k: int | None = 40,
 ) -> None:
     """TODO: start_context를 encode하고 generate 후 decode하여 출력합니다."""
-    raise NotImplementedError("generate_and_print_sample을 구현하세요.")
+    
+    # 생성시에는 dropout 끄기
+    model.eval()
+    
+    encoded = tokenizer.encode(start_context)
+    idx = torch.tensor(encoded, dtype=torch.long, device=device).unsqueeze(0)
 
+    # generate 함수 호출해서 next_token 저장
+    generated_ids = generate(
+        model=model,
+        idx=idx,
+        max_new_tokens=max_new_tokens,
+        context_size=context_size,
+        temperature=temperature,
+        top_k=top_k,
+    )
+
+    generated_text = tokenizer.decode(generated_ids[0].tolist())
+    print(generated_text)
+
+    # 학습시 dropout 켜기
+    model.train()
 
 def train_model(
     model: GPTModel,
