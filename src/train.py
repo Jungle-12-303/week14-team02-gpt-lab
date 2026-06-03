@@ -193,7 +193,7 @@ def train_model(
     ckpt_freq: int | None = None,
     start_epoch: int = 0,
     global_step: int = 0,
-) -> list[float]:
+) -> tuple[list[float], list[float]]:
     """TODO: 사전 학습 루프를 구현하고 epoch별 train loss 리스트를 반환합니다."""
     # 평가한 손실값 기록 리스트
     train_losses = []
@@ -254,7 +254,7 @@ def train_model(
                     path=f"checkpoint_step_{global_step}.pt",
                 )
 
-    return train_losses
+    return train_losses, val_losses
 
 
 def plot_losses(train_losses: list[float], val_losses: list[float] | None = None) -> None:
