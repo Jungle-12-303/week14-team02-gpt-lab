@@ -7,10 +7,29 @@ import torch
 import torch.nn as nn
 from torch.utils.data import Dataset
 
+import csv
+import json
+import random
+from pathlib import Path
+
 try:
     from .model import GPTModel
 except ImportError:
     from model import GPTModel
+
+def _read_nsmc_tsv(path: str | Path) -> list[dict]:
+    rows = []
+    with Path(path).open("r", encoding="utf-8") as f:
+        reader = csv.DictReader(f, delimiter="\t")
+        for row in reader:
+            text = row["document"].strip()
+            if not text:
+                continue
+
+            rows.append({
+                "text": text,
+                "label": int(row["label"]),
+            })
 
 
 def make_sentiment_dataset(
@@ -26,6 +45,22 @@ def make_sentiment_dataset(
     반환 형식:
         [{"text": "리뷰", "label": 0 또는 1}, ...]
     """
+    train_val_data = _read_nsmc_tsv(train_tsv_path)
+
+    rng = random.Random(seed)
+    rng.shuffle(train_val_data)
+
+    val_size = int(len(train_val_data) * val_ratio)
+
+    val_data = train_val_data[:val_size]
+    train_data = train_val_data[val_size:]
+
+    if test_tsv_path is None:
+        test_data = []
+    else:
+        test_data = _read_nsmc_tsv(test_tsv_path)
+    
+    return train_data, val_data, test_data
     raise NotImplementedError("make_sentiment_dataset을 구현하세요.")
 
 
