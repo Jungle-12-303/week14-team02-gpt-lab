@@ -120,6 +120,7 @@ class GPTForSequenceClassification(nn.Module):
     def __init__(
         self,
         gpt_model: GPTModel,
+        # 분류 클래스 개수
         num_labels: int = 2,
         drop_rate: float = 0.1,
     ):
@@ -127,7 +128,8 @@ class GPTForSequenceClassification(nn.Module):
         self.gpt = gpt_model
         self.num_labels = num_labels
         # TODO: dropout과 classifier를 정의하세요. classifier 입력 차원은 gpt_model.config["emb_dim"]입니다.
-        raise NotImplementedError("GPTForSequenceClassification.__init__을 구현하세요.")
+        self.dropout = nn.Dropout(drop_rate)
+        self.classifier = nn.Linear(gpt_model.config["emb_dim"], num_labels)
 
     def forward(
         self,
@@ -139,7 +141,26 @@ class GPTForSequenceClassification(nn.Module):
 
         labels가 있으면 (loss, logits), 없으면 logits를 반환합니다.
         """
-        raise NotImplementedError("GPTForSequenceClassification.forward를 구현하세요.")
+        # GPT의 lm_head를 건너뛰고 hidden state까지만 얻기 위함
+        # emb 결과
+        embeddings = self.gpt.embedding(input_ids)
+        # transformerBlock 결과
+        hidden_states = self.gpt.blocks(embeddings)
+        # 정규화된 hidden state
+        hidden_states = self.gpt.result_norm(hidden_states)
+
+        # [batch, seq_len, emb_dim]
+        # [batch, emb_dim]
+        pooled = hidden_states[:, -1, :]
+        pooled = self.dropout(pooled)
+        # 분류점수로 바꿈
+        logits = self.classifier(pooled)
+
+        if labels is None:
+            return logits
+
+        loss = nn.functional.cross_entropy(logits, labels)
+        return loss, logits
 
 
 def train_epoch_sentiment(
