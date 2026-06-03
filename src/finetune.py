@@ -133,7 +133,19 @@ class GPTForSequenceClassification(nn.Module):
 
         labels가 있으면 (loss, logits), 없으면 logits를 반환합니다.
         """
-        raise NotImplementedError("GPTForSequenceClassification.forward를 구현하세요.")
+        x = self.gpt.embedding(input_ids)
+        x = self.gpt.blocks(x)
+        x = self.gpt.final_norm(x)
+
+        last_token_hidden = x [:, -1, :]
+
+        logits = self.classifier(self.dropout(last_token_hidden))
+
+        if labels is not None:
+            loss = nn.functional.cross_entropy(logits, labels)
+            return loss, logits
+        
+        return logits
 
 
 def train_epoch_sentiment(
@@ -143,7 +155,34 @@ def train_epoch_sentiment(
     device: torch.device,
 ) -> tuple[float, float]:
     """TODO: 감성 분류 모델을 1 epoch 훈련하고 (평균 loss, accuracy)를 반환합니다."""
-    raise NotImplementedError("train_epoch_sentiment를 구현하세요.")
+    model.train()
+
+    total_loss = 0.0
+    total_correct = 0
+    total_examples = 0
+
+    for input_ids, labels in train_loader:
+        input_ids = input_ids.to(device)
+        labels = labels.to(device)
+
+        optimizer.zero_grad()
+
+        loss, logits = model(input_ids, labels)
+
+        loss.backward()
+        optimizer.step()
+
+        batch_size = labels.size(0)
+        total_loss += loss.item() * batch_size
+
+        predictions = torch.argmax(logits, dim=-1)
+        total_correct += (predictions == labels).sum().item()
+        total_examples += batch_size
+    
+    avg_loss = total_loss / total_examples
+    accuracy = total_correct / total_examples
+
+    return avg_loss, accuracy
 
 
 def evaluate_sentiment(
