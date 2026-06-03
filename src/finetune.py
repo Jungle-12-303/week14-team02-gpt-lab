@@ -31,6 +31,8 @@ def _read_nsmc_tsv(path: str | Path) -> list[dict]:
                 "label": int(row["label"]),
             })
 
+    return rows
+
 
 def make_sentiment_dataset(
     train_tsv_path: str | Path,
@@ -61,7 +63,6 @@ def make_sentiment_dataset(
         test_data = _read_nsmc_tsv(test_tsv_path)
     
     return train_data, val_data, test_data
-    raise NotImplementedError("make_sentiment_dataset을 구현하세요.")
 
 
 class ReviewSentimentDataset(Dataset):
@@ -115,7 +116,12 @@ class GPTForSequenceClassification(nn.Module):
         self.gpt = gpt_model
         self.num_labels = num_labels
         # TODO: dropout과 classifier를 정의하세요. classifier 입력 차원은 gpt_model.config["emb_dim"]입니다.
-        raise NotImplementedError("GPTForSequenceClassification.__init__을 구현하세요.")
+        self.dropout = nn.Dropout(drop_rate)
+        self.classifier = nn.Linear(
+            in_features=gpt_model.config["emb_dim"],
+            out_features=num_labels
+        )
+
 
     def forward(
         self,
