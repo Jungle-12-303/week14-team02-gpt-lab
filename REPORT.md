@@ -22,11 +22,6 @@
 | Train         | batch loss, loader loss, checkpoint, generate, train loop | `src/train.py`      | 사전 학습 실행                 |
 | Finetune      | 감성 분류 dataset, classifier head, train/eval            | `src/finetune.py`   | 분류용 head 추가               |
 
-담당자:
-
-| 담당자 | 담당 내용 |
-| ------ | --------- |
-|        |           |
 
 ## 2. 테스트 통과 현황
 
