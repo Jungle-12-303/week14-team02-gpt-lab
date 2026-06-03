@@ -44,15 +44,9 @@ class BPETokenizer:
         2. byte 0~255를 ID 4~259에 bytes([byte_value]) 형태로 등록합니다.
         """
         # 1. 특수 토큰 등록
-        self.id_to_token[self.get_pad_id()] = PAD_TOKEN
-        self.id_to_token[self.get_unk_id()] = UNK_TOKEN
-        self.id_to_token[self.get_bos_id()] = BOS_TOKEN
-        self.id_to_token[self.get_eos_id()] = EOS_TOKEN
-
-        self.token_to_id[PAD_TOKEN] = self.get_pad_id()
-        self.token_to_id[UNK_TOKEN] = self.get_unk_id()
-        self.token_to_id[BOS_TOKEN] = self.get_bos_id()
-        self.token_to_id[EOS_TOKEN] = self.get_eos_id()
+        for token, idx in SPECIAL_IDS.items():
+            self.id_to_token[idx] = token
+            self.token_to_id[token] = idx
 
         # 2. byte 등록
         for i in range(256):
@@ -210,16 +204,29 @@ class BPETokenizer:
         - byte를 하나씩 decode하지 말고, 마지막에 `bytes(...).decode("utf-8")`를 한 번만 호출합니다.
         """
 
-        tokens = []
-        for id in ids:
-            if skip_special and id in SPECIAL_IDS.values():
+        pieces = []
+        byte_values = []
+
+        for token_id in ids:
+            if token_id in SPECIAL_IDS.values():
+                if skip_special:
+                    continue
+                if byte_values:
+                    pieces.append(bytes(byte_values).decode("utf-8"))
+                    byte_values = []
+                pieces.append(self.id_to_token[token_id])
                 continue
 
-            tokens.extend(self.expand(id))
+            byte_values.extend(self.expand(token_id))
 
-        return bytes(tokens).decode("utf-8")
+        if byte_values:
+            pieces.append(bytes(byte_values).decode("utf-8"))
+
+        return "".join(pieces)
     
     def expand(self, id: int) -> list[int]:
+        if id in SPECIAL_IDS.values():
+            return []
         if id < BYTE_OFFSET + NUM_BYTES:
             return [id - BYTE_OFFSET]
         
