@@ -191,4 +191,27 @@ def evaluate_sentiment(
     device: torch.device,
 ) -> tuple[float, float]:
     """TODO: 감성 분류 모델을 평가하고 (평균 loss, accuracy)를 반환합니다."""
-    raise NotImplementedError("evaluate_sentiment를 구현하세요.")
+    model.eval()
+
+    total_loss = 0.0
+    total_correct = 0
+    total_examples = 0
+
+    with torch.no_grad():
+        for input_ids, labels in data_loader:
+            input_ids = input_ids.to(device)
+            labels = labels.to(device)
+
+            loss, logits = model(input_ids, labels)
+
+            batch_size = labels.size(0)
+            total_loss += loss.item() * batch_size
+
+            predictions = torch.argmax(logits, dim=-1)
+            total_correct += (predictions == labels).sum().item()
+            total_examples += batch_size
+    
+    avg_loss = total_loss / total_examples
+    accuracy = total_correct / total_examples
+
+    return avg_loss, accuracy
