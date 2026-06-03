@@ -177,6 +177,9 @@ def train_epoch_sentiment(
     correct = 0
     total = 0
 
+    if len(train_loader) == 0:
+        return float("nan"), float("nan")
+    
     for input_ids, labels in train_loader:
         input_ids = input_ids.to(device)
         labels = labels.to(device)
@@ -211,6 +214,9 @@ def evaluate_sentiment(
     correct = 0
     total = 0
 
+    if len(data_loader) == 0:
+        return float("nan"), float("nan")
+    
     with torch.no_grad():
         for input_ids, labels in data_loader:
             input_ids = input_ids.to(device)
@@ -222,9 +228,6 @@ def evaluate_sentiment(
             predictions = torch.argmax(logits, dim=-1)
             correct += (predictions == labels).sum().item()
             total += labels.size(0)
-            
-    if len(data_loader) == 0:
-        return float("nan"), float("nan")
     
     avg_loss = total_loss / len(data_loader)
     # 정확도
