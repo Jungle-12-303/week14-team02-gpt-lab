@@ -3,6 +3,7 @@
 
 import torch
 import torch.nn as nn
+import math
 
 try:
     from .attention import MultiHeadAttention
@@ -36,7 +37,7 @@ class GELU(nn.Module):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """TODO: tanh 근사식 또는 torch 연산으로 GELU를 구현합니다."""
-        return 0.5 * x * (1 + torch.tanh(torch.sqrt(torch.tensor(2.0 / torch.pi)) * (x + 0.044715 * torch.pow(x, 3))))
+        return 0.5 * x * (1 + torch.tanh(math.sqrt(2.0 / math.pi) * (x + 0.044715 * x.pow(3))))
 
 
 class FeedForward(nn.Module):
@@ -50,7 +51,6 @@ class FeedForward(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """TODO: FeedForward 네트워크를 통과시킵니다."""
         return self.layers(x)
-        raise NotImplementedError("FeedForward.forward를 구현하세요.")
 
 
 class TransformerBlock(nn.Module):
@@ -165,14 +165,22 @@ def generate_text_simple(
 ) -> torch.Tensor:
     """TODO: greedy 방식으로 max_new_tokens만큼 다음 토큰을 이어 붙입니다."""
     for _ in range(max_new_tokens):
+        # 마지막 context_size개만 사용
+        # 시퀀스가 100이고 context size가 4이면 마지막 96~99번째 토큰으로 짜르겠다.
         idx_cond = idx[:, -context_size:]
+        # no_grad: gradiant 계산하지 마라. 학습 x 예측만
         with torch.no_grad():
+            # 모델에 넣어 logits 연산
             logits = model(idx_cond)
         
+        # 마지막 위치의 예측 값만 봄
         logits = logits[:, -1, :]
-        # probas는 이후 argmax를 하기 때문에 결과가 똑같아서 쓸 필요가 없다는데?
-        probas = torch.softmax(logits, dim=-1)
-        idx_next = torch.argmax(probas, dim=-1, keepdim=True)
+        # probas는 이후 argmax를 하기 때문에 결과가 똑같아서 쓸 필요가 없음
+        # probas = torch.softmax(logits, dim=-1)
+        # 가장 점수가 높은 토큰 선택
+        idx_next = torch.argmax(logits, dim=-1, keepdim=True)
+        # 선택한 토큰을 뒤에 붙임
         idx = torch.cat((idx, idx_next), dim=1)
+        # 루프 반복
     
     return idx

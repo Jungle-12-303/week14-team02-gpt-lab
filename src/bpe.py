@@ -274,8 +274,18 @@ class BPETokenizer:
         return bytes(byte_values).decode("utf-8")
     
     def token_to_bytes(self, token_id: int):
-        if token_id < BYTE_OFFSET + NUM_BYTES:
+        if BYTE_OFFSET <= token_id < BYTE_OFFSET + NUM_BYTES:
             return [token_id - BYTE_OFFSET]
-        
-        merge = self.id_to_token[token_id]
-        return self.token_to_bytes(merge[0]) + self.token_to_bytes(merge[1])
+
+        token = self.id_to_token[token_id]
+
+        if isinstance(token, tuple):
+            return self.token_to_bytes(token[0]) + self.token_to_bytes(token[1])
+
+        if isinstance(token, bytes):
+            return list(token)
+
+        if isinstance(token, str):
+            return token.encode("utf-8")
+
+        raise ValueError(f"Unknown token id: {token_id}")
