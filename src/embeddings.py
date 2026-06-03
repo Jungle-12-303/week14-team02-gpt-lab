@@ -23,11 +23,19 @@ class InputEmbedding(nn.Module):
         context_length: int,
         drop_rate: float = 0.1,
     ):
+        # 상속한 부모 클래스 함수 호출 (nn.Module)
         super().__init__()
+        # token 하나를 얼만큼의 벡터로 설정할 건지
         self.emb_dim = emb_dim
         self.context_length = context_length
         # TODO: token_embedding, position_embedding, dropout을 정의하세요.
-        raise NotImplementedError("InputEmbedding.__init__을 구현하세요.")
+        
+        self.token_embedding = nn.Embedding(vocab_size, emb_dim)
+        # 위치를 벡터로 표현 (문장의 자리수 만큼)
+        self.position_embedding = nn.Embedding(context_length, emb_dim)
+        # dropout layer 생성
+        self.dropout = nn.Dropout(drop_rate)
+
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
@@ -39,4 +47,17 @@ class InputEmbedding(nn.Module):
         Returns:
             (batch_size, seq_len, emb_dim)
         """
-        raise NotImplementedError("InputEmbedding.forward를 구현하세요.")
+        _, sequence_length = x.shape
+        # 벡터로 변경
+        token_embeddings = self.token_embedding(x)
+
+        # position id 만들기
+        positions = torch.arange(sequence_length, device=x.device)
+        # position vector 생성
+        position_embeddings = self.position_embedding(positions)
+        # token vector에 position 정보 추가
+        embeddings = token_embeddings + position_embeddings
+        # 학습 모드에서는 dropout을 적용하고 평가 모드에서는 그대로 통과
+        embeddings = self.dropout(embeddings)
+
+        return embeddings
