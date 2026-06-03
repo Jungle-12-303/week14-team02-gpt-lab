@@ -162,7 +162,7 @@ class GPTForSequenceClassification(nn.Module):
         loss = nn.functional.cross_entropy(logits, labels)
         return loss, logits
 
-
+# 1 epoch 훈련
 def train_epoch_sentiment(
     model: GPTForSequenceClassification,
     train_loader,
@@ -170,8 +170,33 @@ def train_epoch_sentiment(
     device: torch.device,
 ) -> tuple[float, float]:
     """TODO: 감성 분류 모델을 1 epoch 훈련하고 (평균 loss, accuracy)를 반환합니다."""
-    raise NotImplementedError("train_epoch_sentiment를 구현하세요.")
+    model.to(device)
+    model.train()
 
+    total_loss = 0.0
+    correct = 0
+    total = 0
+
+    for input_ids, labels in train_loader:
+        input_ids = input_ids.to(device)
+        labels = labels.to(device)
+
+        optimizer.zero_grad()
+
+        loss, logits = model(input_ids, labels)
+
+        loss.backward()
+        optimizer.step()
+
+        total_loss += loss.item()
+        predictions = torch.argmax(logits, dim=-1)
+        correct += (predictions == labels).sum().item()
+        total += labels.size(0)
+
+    avg_loss = total_loss / len(train_loader)
+    accuracy = correct / total
+
+    return avg_loss, accuracy
 
 def evaluate_sentiment(
     model: GPTForSequenceClassification,
