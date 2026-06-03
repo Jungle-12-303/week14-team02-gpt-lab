@@ -2,7 +2,8 @@
 """NSMC 감성 분류 미세 조정 과제 템플릿."""
 
 from pathlib import Path
-
+import csv
+import random
 import torch
 import torch.nn as nn
 from torch.utils.data import Dataset
@@ -14,9 +15,13 @@ except ImportError:
 
 
 def make_sentiment_dataset(
+    # 훈련용 TSV 파일 경로
     train_tsv_path: str | Path,
+    # test용 파일 경로
     test_tsv_path: str | Path | None = None,
+    # validation으로 가질 데이터 비율
     val_ratio: float = 0.08,
+    # 데이터를 섞는 랜덤 seed
     seed: int = 42,
     output_dir: str | Path | None = None,
 ) -> tuple[list[dict], list[dict], list[dict]]:
@@ -26,7 +31,45 @@ def make_sentiment_dataset(
     반환 형식:
         [{"text": "리뷰", "label": 0 또는 1}, ...]
     """
-    raise NotImplementedError("make_sentiment_dataset을 구현하세요.")
+    def read_tsv(path: str | Path) -> list[dict]:
+        rows = []
+
+        with open(path, "r", encoding="utf-8") as f:
+            
+            reader = csv.DictReader(f, delimiter="\t")
+
+            for row in reader:
+                text = row["document"]
+                # 빈 리뷰 건너 뛰기
+                if text is None or text == "":
+                    continue
+                
+                rows.append({
+                    "text": text,
+                    "label": int(row["label"]),
+                })
+
+        return rows
+    
+    # train 파일 읽기
+    train_all = read_tsv(train_tsv_path)
+
+    # seed를 고정해서 랜덤으로 train 데이터 섞기
+    rng = random.Random(seed)
+    rng.shuffle(train_all)
+    # validation으로 뺄 데이터 개수 계산
+    val_size = int(len(train_all) * val_ratio)
+    # 모델 검증용 data
+    val_data = train_all[:val_size]
+    train_data = train_all[val_size:]
+
+    # test 파일이 있으면 따로읽음 (최종 성능 확인용)
+    if test_tsv_path is None:
+        test_data = []
+    else:
+        test_data = read_tsv(test_tsv_path)
+
+    return train_data, val_data, test_data
 
 
 class ReviewSentimentDataset(Dataset):
