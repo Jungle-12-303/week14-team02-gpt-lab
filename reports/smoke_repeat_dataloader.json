@@ -1,0 +1,91 @@
+{
+  "device": "mps",
+  "config": {
+    "context_length": 32,
+    "batch_size": 8,
+    "steps": 5,
+    "eval_every": 5,
+    "eval_batches": 1,
+    "train_char_limit": 1200,
+    "val_char_limit": 1200,
+    "emb_dim": 64,
+    "n_heads": 4,
+    "n_layers": 2,
+    "lr": 0.0003,
+    "seeds": "123",
+    "variants": "standard_embedding",
+    "top_k": 8,
+    "prompt": "영화",
+    "max_new_tokens": 40,
+    "experiment_name": "Smoke repeat dataloader",
+    "output_json": "reports/smoke_repeat_dataloader.json",
+    "csv_path": "reports/smoke_repeat_dataloader.csv",
+    "plot_path": "reports/smoke_repeat_dataloader_loss_full.png",
+    "summary_csv": "reports/smoke_repeat_dataloader_summary.csv",
+    "history_csv": "reports/smoke_repeat_dataloader_history.csv",
+    "mean_plot_path": "reports/smoke_repeat_dataloader_loss_mean.png",
+    "cost_quality_plot_path": "reports/smoke_repeat_dataloader_cost_quality.png",
+    "zoom_plot_path": "reports/smoke_repeat_dataloader_loss_zoom_700.png",
+    "delta_plot_path": "reports/smoke_repeat_dataloader_loss_delta.png",
+    "best_loss_bar_path": "reports/smoke_repeat_dataloader_best_loss_bar.png",
+    "position_effect_plot_path": "reports/smoke_repeat_dataloader_position_effect.png",
+    "relation_stats_plot_path": "reports/smoke_repeat_dataloader_relation_stats.png",
+    "final_report_md": null,
+    "report_md": "/Users/magik/Documents/jungle/02gpt-lab/reports/triangular_relation_research.md",
+    "append_report": false
+  },
+  "summary": [
+    {
+      "variant": "standard_embedding",
+      "attention_type": "standard",
+      "position_mode": "embedding",
+      "seeds": 1,
+      "best_val_mean": 8.194011688232422,
+      "best_val_std": 0.0,
+      "final_val_mean": 8.194011688232422,
+      "final_val_std": 0.0,
+      "ms_per_step_mean": 28.576566593255848,
+      "ms_per_step_std": 0.0,
+      "score_elements_per_model_mean": 65536,
+      "params_mean": 488760
+    }
+  ],
+  "results": [
+    {
+      "variant": "standard_embedding",
+      "seed": 123,
+      "attention_type": "standard",
+      "position_mode": "embedding",
+      "params": 488760,
+      "score_elements_per_layer": 32768,
+      "score_elements_per_model": 65536,
+      "steps": 5,
+      "initial_train_loss": 8.219974517822266,
+      "initial_val_loss": 8.205463409423828,
+      "final_train_loss": 8.088777542114258,
+      "final_val_loss": 8.194011688232422,
+      "best_val_loss": 8.194011688232422,
+      "last_step_loss": 8.114042282104492,
+      "final_relation_stats": {},
+      "history": [
+        {
+          "step": 0,
+          "step_loss": null,
+          "train_loss": 8.219974517822266,
+          "val_loss": 8.205463409423828,
+          "relation_stats": {}
+        },
+        {
+          "step": 5,
+          "step_loss": 8.114042282104492,
+          "train_loss": 8.088777542114258,
+          "val_loss": 8.194011688232422,
+          "relation_stats": {}
+        }
+      ],
+      "elapsed_sec": 0.14288283296627924,
+      "ms_per_step": 28.576566593255848,
+      "generated_text": "영화 죄견감�친지는 몸�� 보고 싶 생각이 잼 �!! 아까운 한번 유,,, 모르겠 내용도쉬걸�던 빠져و던치고게 추천 물 이미코미디 내가재땜에인공장면 오글스팅 오글스팅 오글"
+    }
+  ]
+}

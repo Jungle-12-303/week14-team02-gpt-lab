@@ -151,6 +151,120 @@ class TestGPTModel:
         assert loss.dim() == 0
         assert loss.item() >= 0
 
+    def test_gpt_forward_with_ternary_attention(self):
+        """attention_type='ternary' 설정에서도 logits와 loss shape가 유지되는지 확인한다."""
+        from model import GPTModel
+
+        config = GPT_CONFIG_SMALL.copy()
+        config["context_length"] = 8
+        config["attention_type"] = "ternary"
+        model = GPTModel(config)
+        idx = torch.randint(0, config["vocab_size"], (2, 8))
+        targets = torch.randint(0, config["vocab_size"], (2, 8))
+        loss, logits = model(idx, targets=targets)
+
+        assert loss.dim() == 0
+        assert logits.shape == (2, 8, config["vocab_size"])
+
+    def test_gpt_forward_with_triangular_attention_options(self):
+        """attention_type='triangular'와 [삼각 관계] 세부 옵션이 GPTModel에 연결되는지 확인한다."""
+        from model import GPTModel
+
+        config = GPT_CONFIG_SMALL.copy()
+        config["context_length"] = 8
+        config["attention_type"] = "triangular"
+        config["triangular_value_mode"] = "pair"
+        config["triangular_logit_scale"] = "learned"
+        config["triangular_candidate_mode"] = "topk"
+        config["triangular_top_k"] = 4
+        model = GPTModel(config)
+        idx = torch.randint(0, config["vocab_size"], (2, 8))
+        targets = torch.randint(0, config["vocab_size"], (2, 8))
+        loss, logits = model(idx, targets=targets)
+
+        assert loss.dim() == 0
+        assert logits.shape == (2, 8, config["vocab_size"])
+
+    def test_gpt_forward_with_gated_triangular_attention(self):
+        """gated pair-value [삼각 관계] 설정도 GPTModel forward를 통과해야 한다."""
+        from model import GPTModel
+
+        config = GPT_CONFIG_SMALL.copy()
+        config["context_length"] = 8
+        config["attention_type"] = "triangular"
+        config["triangular_value_mode"] = "pair_gated"
+        config["triangular_logit_scale"] = "learned"
+        config["triangular_candidate_mode"] = "full"
+        model = GPTModel(config)
+        idx = torch.randint(0, config["vocab_size"], (2, 8))
+        targets = torch.randint(0, config["vocab_size"], (2, 8))
+        loss, logits = model(idx, targets=targets)
+
+        assert loss.dim() == 0
+        assert logits.shape == (2, 8, config["vocab_size"])
+
+    def test_gpt_forward_with_alternating_attention(self):
+        """attention_type='alternating'은 standard -> triangular 순서로 block을 구성한다."""
+        from attention import MultiHeadAttention, TriangularRelationAttention
+        from model import GPTModel
+
+        config = GPT_CONFIG_SMALL.copy()
+        config["context_length"] = 8
+        config["attention_type"] = "alternating"
+        config["triangular_value_mode"] = "pair_gated"
+        config["triangular_logit_scale"] = "learned"
+        config["triangular_candidate_mode"] = "topk"
+        config["triangular_top_k"] = 4
+        model = GPTModel(config)
+        idx = torch.randint(0, config["vocab_size"], (2, 8))
+        targets = torch.randint(0, config["vocab_size"], (2, 8))
+        loss, logits = model(idx, targets=targets)
+
+        assert isinstance(model.blocks[0].attention, MultiHeadAttention)
+        assert isinstance(model.blocks[1].attention, TriangularRelationAttention)
+        assert loss.dim() == 0
+        assert logits.shape == (2, 8, config["vocab_size"])
+
+    def test_gpt_forward_with_position_encoding(self):
+        """position_mode='encoding' 설정에서도 GPTModel forward/loss가 유지된다."""
+        from model import GPTModel
+
+        config = GPT_CONFIG_SMALL.copy()
+        config["context_length"] = 8
+        config["position_mode"] = "encoding"
+        model = GPTModel(config)
+        idx = torch.randint(0, config["vocab_size"], (2, 8))
+        targets = torch.randint(0, config["vocab_size"], (2, 8))
+        loss, logits = model(idx, targets=targets)
+
+        assert loss.dim() == 0
+        assert logits.shape == (2, 8, config["vocab_size"])
+        assert hasattr(model.embedding, "position_encoding")
+
+    def test_alternating_attention_with_position_encoding(self):
+        """alternating attention과 fixed positional encoding을 함께 사용할 수 있어야 한다."""
+        from attention import MultiHeadAttention, TriangularRelationAttention
+        from model import GPTModel
+
+        config = GPT_CONFIG_SMALL.copy()
+        config["context_length"] = 8
+        config["attention_type"] = "alternating"
+        config["position_mode"] = "encoding"
+        config["triangular_value_mode"] = "pair_gated"
+        config["triangular_logit_scale"] = "learned"
+        config["triangular_candidate_mode"] = "topk"
+        config["triangular_top_k"] = 4
+        model = GPTModel(config)
+        idx = torch.randint(0, config["vocab_size"], (2, 8))
+        targets = torch.randint(0, config["vocab_size"], (2, 8))
+        loss, logits = model(idx, targets=targets)
+
+        assert isinstance(model.blocks[0].attention, MultiHeadAttention)
+        assert isinstance(model.blocks[1].attention, TriangularRelationAttention)
+        assert loss.dim() == 0
+        assert logits.shape == (2, 8, config["vocab_size"])
+        assert hasattr(model.embedding, "position_encoding")
+
 
 # =============================================================================
 # generate_text_simple

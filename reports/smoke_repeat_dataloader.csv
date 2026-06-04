@@ -1,0 +1,2 @@
+variant,seed,attention_type,position_mode,params,score_elements_per_layer,score_elements_per_model,steps,initial_train_loss,final_train_loss,initial_val_loss,final_val_loss,best_val_loss,ms_per_step,relation_entropy,relation_max_weight,relation_logit_mean,relation_logit_std,logit_scale,pair_gate
+standard_embedding,123,standard,embedding,488760,32768,65536,5,8.219974517822266,8.088777542114258,8.205463409423828,8.194011688232422,8.194011688232422,28.576566593255848,,,,,,

@@ -1,0 +1,404 @@
+{
+  "device": "mps",
+  "config": {
+    "context_length": 32,
+    "batch_size": 8,
+    "steps": 300,
+    "eval_every": 100,
+    "eval_batches": 8,
+    "train_char_limit": 300000,
+    "val_char_limit": 50000,
+    "emb_dim": 64,
+    "n_heads": 4,
+    "n_layers": 2,
+    "lr": 0.0003,
+    "seeds": "123",
+    "variants": "standard,triangular_v0,triangular_v1_pair_value,triangular_v2_scaled,triangular_v3_topk",
+    "top_k": 16,
+    "prompt": "영화",
+    "max_new_tokens": 40,
+    "experiment_name": "NSMC LM 300 step triangular variants",
+    "output_json": "reports/attention_compare_triangular_300.json",
+    "csv_path": "reports/attention_compare_triangular_300.csv",
+    "plot_path": "reports/attention_compare_triangular_300_loss.png",
+    "report_md": "/Users/magik/Documents/jungle/02gpt-lab/reports/triangular_relation_research.md",
+    "append_report": true
+  },
+  "results": [
+    {
+      "variant": "standard",
+      "seed": 123,
+      "params": 488760,
+      "score_elements_per_layer": 32768,
+      "steps": 300,
+      "initial_train_loss": 8.166136264801025,
+      "initial_val_loss": 8.17833161354065,
+      "final_train_loss": 7.265708863735199,
+      "final_val_loss": 7.34734719991684,
+      "best_val_loss": 7.34734719991684,
+      "last_step_loss": 7.371159553527832,
+      "final_relation_stats": {},
+      "history": [
+        {
+          "step": 0,
+          "step_loss": null,
+          "train_loss": 8.166136264801025,
+          "val_loss": 8.17833161354065,
+          "relation_stats": {}
+        },
+        {
+          "step": 100,
+          "step_loss": 7.696543216705322,
+          "train_loss": 7.598222017288208,
+          "val_loss": 7.73482346534729,
+          "relation_stats": {}
+        },
+        {
+          "step": 200,
+          "step_loss": 7.509474277496338,
+          "train_loss": 7.326899290084839,
+          "val_loss": 7.420901536941528,
+          "relation_stats": {}
+        },
+        {
+          "step": 300,
+          "step_loss": 7.371159553527832,
+          "train_loss": 7.265708863735199,
+          "val_loss": 7.34734719991684,
+          "relation_stats": {}
+        }
+      ],
+      "elapsed_sec": 1.7750789580168203,
+      "ms_per_step": 5.916929860056068,
+      "generated_text": "영화이이이이이이이이이이이이이도이이이이이이이이는이이도이이도이도이이이이이이이이이"
+    },
+    {
+      "variant": "triangular_v0",
+      "seed": 123,
+      "params": 505144,
+      "score_elements_per_layer": 1048576,
+      "steps": 300,
+      "initial_train_loss": 8.167159795761108,
+      "initial_val_loss": 8.159859895706177,
+      "final_train_loss": 7.257808089256287,
+      "final_val_loss": 7.349295794963837,
+      "best_val_loss": 7.349295794963837,
+      "last_step_loss": 7.361371040344238,
+      "final_relation_stats": {
+        "relation_entropy": 4.62438702583313,
+        "relation_max_weight": 0.10644064657390118,
+        "relation_logit_mean": 2.2121364907361567,
+        "relation_logit_std": 1.7728068754076958,
+        "relation_score_elements": 1048576.0,
+        "logit_scale": 1.0
+      },
+      "history": [
+        {
+          "step": 0,
+          "step_loss": null,
+          "train_loss": 8.167159795761108,
+          "val_loss": 8.159859895706177,
+          "relation_stats": {
+            "relation_entropy": 5.079146862030029,
+            "relation_max_weight": 0.05754617229104042,
+            "relation_logit_mean": -0.0004603459710779134,
+            "relation_logit_std": 0.1965424120426178,
+            "relation_score_elements": 1048576.0,
+            "logit_scale": 1.0
+          }
+        },
+        {
+          "step": 100,
+          "step_loss": 7.675638198852539,
+          "train_loss": 7.575852632522583,
+          "val_loss": 7.7214542627334595,
+          "relation_stats": {
+            "relation_entropy": 5.074507236480713,
+            "relation_max_weight": 0.058573076501488686,
+            "relation_logit_mean": 0.028383421784383245,
+            "relation_logit_std": 0.2243484929203987,
+            "relation_score_elements": 1048576.0,
+            "logit_scale": 1.0
+          }
+        },
+        {
+          "step": 200,
+          "step_loss": 7.492713451385498,
+          "train_loss": 7.310470879077911,
+          "val_loss": 7.414756774902344,
+          "relation_stats": {
+            "relation_entropy": 4.882961750030518,
+            "relation_max_weight": 0.07941609434783459,
+            "relation_logit_mean": 0.9541130590368994,
+            "relation_logit_std": 0.962217353284359,
+            "relation_score_elements": 1048576.0,
+            "logit_scale": 1.0
+          }
+        },
+        {
+          "step": 300,
+          "step_loss": 7.361371040344238,
+          "train_loss": 7.257808089256287,
+          "val_loss": 7.349295794963837,
+          "relation_stats": {
+            "relation_entropy": 4.62438702583313,
+            "relation_max_weight": 0.10644064657390118,
+            "relation_logit_mean": 2.2121364907361567,
+            "relation_logit_std": 1.7728068754076958,
+            "relation_score_elements": 1048576.0,
+            "logit_scale": 1.0
+          }
+        }
+      ],
+      "elapsed_sec": 3.415051041985862,
+      "ms_per_step": 11.383503473286206,
+      "generated_text": "영화이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이"
+    },
+    {
+      "variant": "triangular_v1_pair_value",
+      "seed": 123,
+      "params": 505144,
+      "score_elements_per_layer": 1048576,
+      "steps": 300,
+      "initial_train_loss": 8.16578495502472,
+      "initial_val_loss": 8.160051822662354,
+      "final_train_loss": 7.26014256477356,
+      "final_val_loss": 7.349309027194977,
+      "best_val_loss": 7.349309027194977,
+      "last_step_loss": 7.35988712310791,
+      "final_relation_stats": {
+        "relation_entropy": 4.874208450317383,
+        "relation_max_weight": 0.07850481010973454,
+        "relation_logit_mean": 1.2165706092491746,
+        "relation_logit_std": 1.0093581900000572,
+        "relation_score_elements": 1048576.0,
+        "logit_scale": 1.0
+      },
+      "history": [
+        {
+          "step": 0,
+          "step_loss": null,
+          "train_loss": 8.16578495502472,
+          "val_loss": 8.160051822662354,
+          "relation_stats": {
+            "relation_entropy": 5.079139947891235,
+            "relation_max_weight": 0.05753929913043976,
+            "relation_logit_mean": -0.0004346829518908635,
+            "relation_logit_std": 0.1965835765004158,
+            "relation_score_elements": 1048576.0,
+            "logit_scale": 1.0
+          }
+        },
+        {
+          "step": 100,
+          "step_loss": 7.675729751586914,
+          "train_loss": 7.576968491077423,
+          "val_loss": 7.721685290336609,
+          "relation_stats": {
+            "relation_entropy": 5.07552170753479,
+            "relation_max_weight": 0.05825663171708584,
+            "relation_logit_mean": 0.02122605690965429,
+            "relation_logit_std": 0.2194540649652481,
+            "relation_score_elements": 1048576.0,
+            "logit_scale": 1.0
+          }
+        },
+        {
+          "step": 200,
+          "step_loss": 7.489619255065918,
+          "train_loss": 7.312257647514343,
+          "val_loss": 7.413903653621674,
+          "relation_stats": {
+            "relation_entropy": 4.99608039855957,
+            "relation_max_weight": 0.06738163344562054,
+            "relation_logit_mean": 0.5481242295645643,
+            "relation_logit_std": 0.5682216733694077,
+            "relation_score_elements": 1048576.0,
+            "logit_scale": 1.0
+          }
+        },
+        {
+          "step": 300,
+          "step_loss": 7.35988712310791,
+          "train_loss": 7.26014256477356,
+          "val_loss": 7.349309027194977,
+          "relation_stats": {
+            "relation_entropy": 4.874208450317383,
+            "relation_max_weight": 0.07850481010973454,
+            "relation_logit_mean": 1.2165706092491746,
+            "relation_logit_std": 1.0093581900000572,
+            "relation_score_elements": 1048576.0,
+            "logit_scale": 1.0
+          }
+        }
+      ],
+      "elapsed_sec": 3.6204931249958463,
+      "ms_per_step": 12.068310416652821,
+      "generated_text": "영화이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이"
+    },
+    {
+      "variant": "triangular_v2_scaled",
+      "seed": 123,
+      "params": 505146,
+      "score_elements_per_layer": 1048576,
+      "steps": 300,
+      "initial_train_loss": 8.16578495502472,
+      "initial_val_loss": 8.160051822662354,
+      "final_train_loss": 7.260168552398682,
+      "final_val_loss": 7.3493011593818665,
+      "best_val_loss": 7.3493011593818665,
+      "last_step_loss": 7.359856605529785,
+      "final_relation_stats": {
+        "relation_entropy": 4.841302394866943,
+        "relation_max_weight": 0.0818922109901905,
+        "relation_logit_mean": 1.3104750736383721,
+        "relation_logit_std": 1.07929215580225,
+        "relation_score_elements": 1048576.0,
+        "logit_scale": 1.0428723096847534
+      },
+      "history": [
+        {
+          "step": 0,
+          "step_loss": null,
+          "train_loss": 8.16578495502472,
+          "val_loss": 8.160051822662354,
+          "relation_stats": {
+            "relation_entropy": 5.079139947891235,
+            "relation_max_weight": 0.05753929913043976,
+            "relation_logit_mean": -0.0004346829518908635,
+            "relation_logit_std": 0.1965835765004158,
+            "relation_score_elements": 1048576.0,
+            "logit_scale": 1.0
+          }
+        },
+        {
+          "step": 100,
+          "step_loss": 7.675725936889648,
+          "train_loss": 7.57696408033371,
+          "val_loss": 7.721683084964752,
+          "relation_stats": {
+            "relation_entropy": 5.0751917362213135,
+            "relation_max_weight": 0.05832725018262863,
+            "relation_logit_mean": 0.021393659786554053,
+            "relation_logit_std": 0.22108522802591324,
+            "relation_score_elements": 1048576.0,
+            "logit_scale": 1.00739324092865
+          }
+        },
+        {
+          "step": 200,
+          "step_loss": 7.489614486694336,
+          "train_loss": 7.312262058258057,
+          "val_loss": 7.413889825344086,
+          "relation_stats": {
+            "relation_entropy": 4.984994411468506,
+            "relation_max_weight": 0.06857447326183319,
+            "relation_logit_mean": 0.5817332715159864,
+            "relation_logit_std": 0.597370333969593,
+            "relation_score_elements": 1048576.0,
+            "logit_scale": 1.0310993194580078
+          }
+        },
+        {
+          "step": 300,
+          "step_loss": 7.359856605529785,
+          "train_loss": 7.260168552398682,
+          "val_loss": 7.3493011593818665,
+          "relation_stats": {
+            "relation_entropy": 4.841302394866943,
+            "relation_max_weight": 0.0818922109901905,
+            "relation_logit_mean": 1.3104750736383721,
+            "relation_logit_std": 1.07929215580225,
+            "relation_score_elements": 1048576.0,
+            "logit_scale": 1.0428723096847534
+          }
+        }
+      ],
+      "elapsed_sec": 3.7505417079664767,
+      "ms_per_step": 12.50180569322159,
+      "generated_text": "영화이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이"
+    },
+    {
+      "variant": "triangular_v3_topk",
+      "seed": 123,
+      "params": 513338,
+      "score_elements_per_layer": 262144,
+      "steps": 300,
+      "initial_train_loss": 8.166409373283386,
+      "initial_val_loss": 8.162549138069153,
+      "final_train_loss": 7.273792743682861,
+      "final_val_loss": 7.344097077846527,
+      "best_val_loss": 7.344097077846527,
+      "last_step_loss": 7.352667808532715,
+      "final_relation_stats": {
+        "relation_entropy": 4.254967927932739,
+        "relation_max_weight": 0.10676245763897896,
+        "relation_logit_mean": 2.1338242355705006,
+        "relation_logit_std": 1.1189304739236832,
+        "relation_score_elements": 262144.0,
+        "logit_scale": 1.0442906618118286
+      },
+      "history": [
+        {
+          "step": 0,
+          "step_loss": null,
+          "train_loss": 8.166409373283386,
+          "val_loss": 8.162549138069153,
+          "relation_stats": {
+            "relation_entropy": 4.67152738571167,
+            "relation_max_weight": 0.05930794030427933,
+            "relation_logit_mean": -0.00021715161710744724,
+            "relation_logit_std": 0.19455937296152115,
+            "relation_score_elements": 262144.0,
+            "logit_scale": 1.0
+          }
+        },
+        {
+          "step": 100,
+          "step_loss": 7.733811378479004,
+          "train_loss": 7.617055237293243,
+          "val_loss": 7.726411283016205,
+          "relation_stats": {
+            "relation_entropy": 4.6651930809021,
+            "relation_max_weight": 0.06102107837796211,
+            "relation_logit_mean": 0.042392101720906794,
+            "relation_logit_std": 0.22984735667705536,
+            "relation_score_elements": 262144.0,
+            "logit_scale": 1.0069684982299805
+          }
+        },
+        {
+          "step": 200,
+          "step_loss": 7.519715309143066,
+          "train_loss": 7.339790999889374,
+          "val_loss": 7.414735436439514,
+          "relation_stats": {
+            "relation_entropy": 4.473808288574219,
+            "relation_max_weight": 0.08381806872785091,
+            "relation_logit_mean": 1.0766017583373468,
+            "relation_logit_std": 0.7252965867519379,
+            "relation_score_elements": 262144.0,
+            "logit_scale": 1.0319414734840393
+          }
+        },
+        {
+          "step": 300,
+          "step_loss": 7.352667808532715,
+          "train_loss": 7.273792743682861,
+          "val_loss": 7.344097077846527,
+          "relation_stats": {
+            "relation_entropy": 4.254967927932739,
+            "relation_max_weight": 0.10676245763897896,
+            "relation_logit_mean": 2.1338242355705006,
+            "relation_logit_std": 1.1189304739236832,
+            "relation_score_elements": 262144.0,
+            "logit_scale": 1.0442906618118286
+          }
+        }
+      ],
+      "elapsed_sec": 5.901773999969009,
+      "ms_per_step": 19.672579999896698,
+      "generated_text": "영화이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이"
+    }
+  ]
+}

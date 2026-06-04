@@ -1,0 +1,141 @@
+{
+  "device": "mps",
+  "config": {
+    "context_length": 16,
+    "batch_size": 4,
+    "steps": 2,
+    "eval_every": 1,
+    "eval_batches": 1,
+    "train_char_limit": 2000,
+    "val_char_limit": 1000,
+    "emb_dim": 64,
+    "n_heads": 4,
+    "n_layers": 2,
+    "lr": 0.0003,
+    "seeds": "123",
+    "variants": "standard,triangular_v4_gated_pair",
+    "top_k": 16,
+    "prompt": "영화",
+    "max_new_tokens": 40,
+    "experiment_name": "Auto smoke_facts4 NSMC iteration 1",
+    "output_json": "/Users/magik/Documents/jungle/02gpt-lab/reports/auto_triangular_research/smoke_facts4/iter_01/nsmc.json",
+    "csv_path": "/Users/magik/Documents/jungle/02gpt-lab/reports/auto_triangular_research/smoke_facts4/iter_01/nsmc.csv",
+    "plot_path": "/Users/magik/Documents/jungle/02gpt-lab/reports/auto_triangular_research/smoke_facts4/iter_01/nsmc_loss.png",
+    "report_md": "/Users/magik/Documents/jungle/02gpt-lab/reports/triangular_relation_research.md",
+    "append_report": true
+  },
+  "results": [
+    {
+      "variant": "standard",
+      "seed": 123,
+      "params": 487736,
+      "score_elements_per_layer": 4096,
+      "steps": 2,
+      "initial_train_loss": 8.19678783416748,
+      "initial_val_loss": 8.34025764465332,
+      "final_train_loss": 8.111846923828125,
+      "final_val_loss": 8.33842658996582,
+      "best_val_loss": 8.33842658996582,
+      "last_step_loss": 8.149249076843262,
+      "final_relation_stats": {},
+      "history": [
+        {
+          "step": 0,
+          "step_loss": null,
+          "train_loss": 8.19678783416748,
+          "val_loss": 8.34025764465332,
+          "relation_stats": {}
+        },
+        {
+          "step": 1,
+          "step_loss": 8.19678783416748,
+          "train_loss": 8.1432523727417,
+          "val_loss": 8.339228630065918,
+          "relation_stats": {}
+        },
+        {
+          "step": 2,
+          "step_loss": 8.149249076843262,
+          "train_loss": 8.111846923828125,
+          "val_loss": 8.33842658996582,
+          "relation_stats": {}
+        }
+      ],
+      "elapsed_sec": 0.1154129589558579,
+      "ms_per_step": 57.70647947792895,
+      "generated_text": "영화 커중간길래정말혜 역 언�링� 만든함.틱��도 코A다는지 않은것 상상도 없필쁘[�연히필쁘[�연히필쁘[�연히필쁘[�연히"
+    },
+    {
+      "variant": "triangular_v4_gated_pair",
+      "seed": 123,
+      "params": 504130,
+      "score_elements_per_layer": 65536,
+      "steps": 2,
+      "initial_train_loss": 8.098125457763672,
+      "initial_val_loss": 8.17575454711914,
+      "final_train_loss": 8.015155792236328,
+      "final_val_loss": 8.172922134399414,
+      "best_val_loss": 8.172922134399414,
+      "last_step_loss": 8.12753677368164,
+      "final_relation_stats": {
+        "relation_entropy": 3.8163061141967773,
+        "relation_max_weight": 0.11144556850194931,
+        "relation_logit_mean": -0.0003789700858760625,
+        "relation_logit_std": 0.1994170844554901,
+        "relation_score_elements": 65536.0,
+        "logit_scale": 0.99997279047966,
+        "pair_gate": 0.11920491605997086
+      },
+      "history": [
+        {
+          "step": 0,
+          "step_loss": null,
+          "train_loss": 8.098125457763672,
+          "val_loss": 8.17575454711914,
+          "relation_stats": {
+            "relation_entropy": 3.8163654804229736,
+            "relation_max_weight": 0.11139971017837524,
+            "relation_logit_mean": -0.00037156735197640955,
+            "relation_logit_std": 0.1992412507534027,
+            "relation_score_elements": 65536.0,
+            "logit_scale": 1.0,
+            "pair_gate": 0.11920291930437088
+          }
+        },
+        {
+          "step": 1,
+          "step_loss": 8.098125457763672,
+          "train_loss": 8.046097755432129,
+          "val_loss": 8.174549102783203,
+          "relation_stats": {
+            "relation_entropy": 3.8163408041000366,
+            "relation_max_weight": 0.11142032593488693,
+            "relation_logit_mean": -0.000379016186343506,
+            "relation_logit_std": 0.19931569695472717,
+            "relation_score_elements": 65536.0,
+            "logit_scale": 1.0000002086162567,
+            "pair_gate": 0.11920355632901192
+          }
+        },
+        {
+          "step": 2,
+          "step_loss": 8.12753677368164,
+          "train_loss": 8.015155792236328,
+          "val_loss": 8.172922134399414,
+          "relation_stats": {
+            "relation_entropy": 3.8163061141967773,
+            "relation_max_weight": 0.11144556850194931,
+            "relation_logit_mean": -0.0003789700858760625,
+            "relation_logit_std": 0.1994170844554901,
+            "relation_score_elements": 65536.0,
+            "logit_scale": 0.99997279047966,
+            "pair_gate": 0.11920491605997086
+          }
+        }
+      ],
+      "elapsed_sec": 0.0929430840187706,
+      "ms_per_step": 46.4715420093853,
+      "generated_text": "영화딩 짱다는 �.. �곤��9건지�은 정말�� 연기도 잘까지호감� 무슨전쟁�네���이라.. � 시청가 있트신이 어느 것큐투했는데 크�� 적) 수작듯"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "device": "cpu",
+  "config": {
+    "context_length": 16,
+    "batch_size": 8,
+    "steps": 20,
+    "eval_batches": 4,
+    "train_char_limit": 20000,
+    "val_char_limit": 5000,
+    "emb_dim": 64,
+    "n_heads": 4,
+    "n_layers": 2,
+    "lr": 0.0003,
+    "seed": 123,
+    "prompt": "영화",
+    "max_new_tokens": 40,
+    "output_json": "/Users/magik/Documents/jungle/02gpt-lab/reports/attention_compare.json"
+  },
+  "results": [
+    {
+      "attention_type": "standard",
+      "params": 487736,
+      "score_elements_per_layer": 8192,
+      "steps": 20,
+      "initial_train_loss": 8.195436716079712,
+      "initial_val_loss": 8.158289432525635,
+      "final_train_loss": 8.007955551147461,
+      "final_val_loss": 8.121244430541992,
+      "last_step_loss": 8.147149085998535,
+      "elapsed_sec": 0.09564441698603332,
+      "ms_per_step": 4.782220849301666,
+      "generated_text": "영화 커중간길래정말치��P틴 영화. 못았 심��음 는지엉 걸작6재밋전에어요 즌��쁘[�연히필쁘[�연히필쁘[�연히필쁘["
+    },
+    {
+      "attention_type": "ternary",
+      "params": 504120,
+      "score_elements_per_layer": 131072,
+      "steps": 20,
+      "initial_train_loss": 8.191697835922241,
+      "initial_val_loss": 8.17499589920044,
+      "final_train_loss": 8.007962346076965,
+      "final_val_loss": 8.132757663726807,
+      "last_step_loss": 8.068014144897461,
+      "elapsed_sec": 0.12072966701816767,
+      "ms_per_step": 6.036483350908384,
+      "generated_text": "영화딩 짱다는 �.. �곤��9건지�은 정말�� 연기도 잘까지호호호호호호호호호호호호호호호호호호호호호호호호호"
+    }
+  ]
+}

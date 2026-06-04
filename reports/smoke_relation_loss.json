@@ -1,0 +1,133 @@
+{
+  "device": "mps",
+  "config": {
+    "steps": 2,
+    "eval_every": 1,
+    "eval_batches": 1,
+    "batch_size": 8,
+    "emb_dim": 64,
+    "n_heads": 4,
+    "n_layers": 2,
+    "lr": 0.0003,
+    "entities": 8,
+    "objects": 8,
+    "facts": 4,
+    "loss_mode": "answer_relation",
+    "relation_loss_weight": 0.5,
+    "top_k": 8,
+    "seeds": "123",
+    "variants": "standard,triangular_v2_scaled",
+    "experiment_name": "Synthetic give relation",
+    "output_json": "reports/smoke_relation_loss.json",
+    "csv_path": "reports/smoke_relation_loss.csv",
+    "plot_path": "reports/smoke_relation_loss.png",
+    "report_md": "/Users/magik/Documents/jungle/02gpt-lab/reports/triangular_relation_research.md",
+    "append_report": false
+  },
+  "results": [
+    {
+      "variant": "standard",
+      "seed": 123,
+      "params": 109888,
+      "score_elements_per_layer": 28800,
+      "steps": 2,
+      "initial_loss": 6.690442085266113,
+      "initial_accuracy": 0.0,
+      "final_loss": 6.085309028625488,
+      "final_accuracy": 0.0,
+      "best_accuracy": 0.25,
+      "last_step_loss": 6.083907604217529,
+      "final_relation_stats": {},
+      "history": [
+        {
+          "step": 0,
+          "loss": 6.690442085266113,
+          "accuracy": 0.0,
+          "relation_stats": {}
+        },
+        {
+          "step": 1,
+          "loss": 6.264732837677002,
+          "accuracy": 0.25,
+          "relation_stats": {}
+        },
+        {
+          "step": 2,
+          "loss": 6.104851722717285,
+          "accuracy": 0.125,
+          "relation_stats": {}
+        }
+      ],
+      "elapsed_sec": 0.1459579580114223,
+      "ms_per_step": 72.97897900571115
+    },
+    {
+      "variant": "triangular_v2_scaled",
+      "seed": 123,
+      "params": 126274,
+      "score_elements_per_layer": 864000,
+      "steps": 2,
+      "initial_loss": 6.487364768981934,
+      "initial_accuracy": 0.0,
+      "final_loss": 6.611672878265381,
+      "final_accuracy": 0.0,
+      "best_accuracy": 0.0,
+      "last_step_loss": 6.653804779052734,
+      "final_relation_stats": {
+        "relation_entropy": 4.958923816680908,
+        "relation_max_weight": 0.06114303879439831,
+        "relation_logit_mean": 0.0016594050102867186,
+        "relation_logit_std": 0.19625046104192734,
+        "relation_score_elements": 864000.0,
+        "logit_scale": 0.9999859035015106,
+        "pair_gate": 0.5
+      },
+      "history": [
+        {
+          "step": 0,
+          "loss": 6.487364768981934,
+          "accuracy": 0.0,
+          "relation_stats": {
+            "relation_entropy": 4.9588634967803955,
+            "relation_max_weight": 0.061204589903354645,
+            "relation_logit_mean": 0.000798089247837197,
+            "relation_logit_std": 0.19612808525562286,
+            "relation_score_elements": 864000.0,
+            "logit_scale": 1.0,
+            "pair_gate": 0.5
+          }
+        },
+        {
+          "step": 1,
+          "loss": 6.525298595428467,
+          "accuracy": 0.0,
+          "relation_stats": {
+            "relation_entropy": 4.958963871002197,
+            "relation_max_weight": 0.06124740652740002,
+            "relation_logit_mean": 0.0008764512822381221,
+            "relation_logit_std": 0.1958424150943756,
+            "relation_score_elements": 864000.0,
+            "logit_scale": 1.0000000298023224,
+            "pair_gate": 0.5
+          }
+        },
+        {
+          "step": 2,
+          "loss": 6.6277666091918945,
+          "accuracy": 0.0,
+          "relation_stats": {
+            "relation_entropy": 4.95904803276062,
+            "relation_max_weight": 0.061044685542583466,
+            "relation_logit_mean": 0.0014695696299895644,
+            "relation_logit_std": 0.19620869308710098,
+            "relation_score_elements": 864000.0,
+            "logit_scale": 0.9999859035015106,
+            "pair_gate": 0.5
+          }
+        }
+      ],
+      "elapsed_sec": 0.12008358299499378,
+      "ms_per_step": 60.04179149749689
+    }
+  ]
+}

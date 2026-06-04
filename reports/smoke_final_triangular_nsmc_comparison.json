@@ -1,0 +1,258 @@
+{
+  "device": "mps",
+  "config": {
+    "context_length": 16,
+    "batch_size": 4,
+    "steps": 2,
+    "eval_every": 1,
+    "eval_batches": 1,
+    "train_char_limit": 2000,
+    "val_char_limit": 1000,
+    "emb_dim": 64,
+    "n_heads": 4,
+    "n_layers": 2,
+    "lr": 0.0003,
+    "seeds": "123",
+    "variants": "standard,triangular_final,alternating_standard_triangular",
+    "top_k": 8,
+    "prompt": "영화",
+    "max_new_tokens": 40,
+    "experiment_name": "Smoke final NSMC attention comparison",
+    "output_json": "reports/smoke_final_triangular_nsmc_comparison.json",
+    "csv_path": "reports/smoke_final_triangular_nsmc_comparison.csv",
+    "plot_path": "reports/smoke_final_triangular_nsmc_loss.png",
+    "summary_csv": "reports/smoke_final_triangular_nsmc_summary.csv",
+    "mean_plot_path": "reports/smoke_final_triangular_nsmc_mean_loss.png",
+    "cost_quality_plot_path": "reports/smoke_final_triangular_nsmc_cost_quality.png",
+    "final_report_md": "reports/smoke_triangular_relation_final_report.md",
+    "report_md": "reports/smoke_final_triangular_relation_research.md",
+    "append_report": true
+  },
+  "summary": [
+    {
+      "variant": "triangular_final",
+      "seeds": 1,
+      "best_val_mean": 8.095531463623047,
+      "best_val_std": 0.0,
+      "final_val_mean": 8.095531463623047,
+      "final_val_std": 0.0,
+      "ms_per_step_mean": 75.3667920071166,
+      "ms_per_step_std": 0.0,
+      "score_elements_per_model_mean": 32768,
+      "params_mean": 512322
+    },
+    {
+      "variant": "alternating_standard_triangular",
+      "seeds": 1,
+      "best_val_mean": 8.299139976501465,
+      "best_val_std": 0.0,
+      "final_val_mean": 8.299139976501465,
+      "final_val_std": 0.0,
+      "ms_per_step_mean": 27.06456248415634,
+      "ms_per_step_std": 0.0,
+      "score_elements_per_model_mean": 20480,
+      "params_mean": 500029
+    },
+    {
+      "variant": "standard",
+      "seeds": 1,
+      "best_val_mean": 8.33842658996582,
+      "best_val_std": 0.0,
+      "final_val_mean": 8.33842658996582,
+      "final_val_std": 0.0,
+      "ms_per_step_mean": 84.39818752231076,
+      "ms_per_step_std": 0.0,
+      "score_elements_per_model_mean": 8192,
+      "params_mean": 487736
+    }
+  ],
+  "results": [
+    {
+      "variant": "standard",
+      "seed": 123,
+      "params": 487736,
+      "score_elements_per_layer": 4096,
+      "score_elements_per_model": 8192,
+      "steps": 2,
+      "initial_train_loss": 8.19678783416748,
+      "initial_val_loss": 8.34025764465332,
+      "final_train_loss": 8.111846923828125,
+      "final_val_loss": 8.33842658996582,
+      "best_val_loss": 8.33842658996582,
+      "last_step_loss": 8.149249076843262,
+      "final_relation_stats": {},
+      "history": [
+        {
+          "step": 0,
+          "step_loss": null,
+          "train_loss": 8.19678783416748,
+          "val_loss": 8.34025764465332,
+          "relation_stats": {}
+        },
+        {
+          "step": 1,
+          "step_loss": 8.19678783416748,
+          "train_loss": 8.1432523727417,
+          "val_loss": 8.339228630065918,
+          "relation_stats": {}
+        },
+        {
+          "step": 2,
+          "step_loss": 8.149249076843262,
+          "train_loss": 8.111846923828125,
+          "val_loss": 8.33842658996582,
+          "relation_stats": {}
+        }
+      ],
+      "elapsed_sec": 0.16879637504462153,
+      "ms_per_step": 84.39818752231076,
+      "generated_text": "영화 커중간길래정말혜 역 언�링� 만든함.틱��도 코A다는지 않은것 상상도 없필쁘[�연히필쁘[�연히필쁘[�연히필쁘[�연히"
+    },
+    {
+      "variant": "triangular_final",
+      "seed": 123,
+      "params": 512322,
+      "score_elements_per_layer": 16384,
+      "score_elements_per_model": 32768,
+      "steps": 2,
+      "initial_train_loss": 8.181161880493164,
+      "initial_val_loss": 8.095746994018555,
+      "final_train_loss": 8.100197792053223,
+      "final_val_loss": 8.095531463623047,
+      "best_val_loss": 8.095531463623047,
+      "last_step_loss": 8.228630065917969,
+      "final_relation_stats": {
+        "relation_entropy": 3.3876333236694336,
+        "relation_max_weight": 0.11765836179256439,
+        "relation_logit_mean": -0.0002771386643871665,
+        "relation_logit_std": 0.20015263557434082,
+        "relation_score_elements": 16384.0,
+        "logit_scale": 0.999967634677887,
+        "pair_gate": 0.11921175196766853
+      },
+      "history": [
+        {
+          "step": 0,
+          "step_loss": null,
+          "train_loss": 8.181161880493164,
+          "val_loss": 8.095746994018555,
+          "relation_stats": {
+            "relation_entropy": 3.3876829147338867,
+            "relation_max_weight": 0.11766589805483818,
+            "relation_logit_mean": -0.00044437726319301873,
+            "relation_logit_std": 0.1998370662331581,
+            "relation_score_elements": 16384.0,
+            "logit_scale": 1.0,
+            "pair_gate": 0.11920291930437088
+          }
+        },
+        {
+          "step": 1,
+          "step_loss": 8.181161880493164,
+          "train_loss": 8.130330085754395,
+          "val_loss": 8.095624923706055,
+          "relation_stats": {
+            "relation_entropy": 3.3876445293426514,
+            "relation_max_weight": 0.11765743046998978,
+            "relation_logit_mean": -0.00033580347371753305,
+            "relation_logit_std": 0.20010843127965927,
+            "relation_score_elements": 16384.0,
+            "logit_scale": 1.0000000298023224,
+            "pair_gate": 0.11920356005430222
+          }
+        },
+        {
+          "step": 2,
+          "step_loss": 8.228630065917969,
+          "train_loss": 8.100197792053223,
+          "val_loss": 8.095531463623047,
+          "relation_stats": {
+            "relation_entropy": 3.3876333236694336,
+            "relation_max_weight": 0.11765836179256439,
+            "relation_logit_mean": -0.0002771386643871665,
+            "relation_logit_std": 0.20015263557434082,
+            "relation_score_elements": 16384.0,
+            "logit_scale": 0.999967634677887,
+            "pair_gate": 0.11921175196766853
+          }
+        }
+      ],
+      "elapsed_sec": 0.1507335840142332,
+      "ms_per_step": 75.3667920071166,
+      "generated_text": "영화 공포영화가 없 해야 바��론가��쓰레기�� 장난 �보니 시즌ㅠㅠㅠㅠ 엔 은 이제 굿�롿징쳤험짜증했는데암� 기짜증했는데암................ 하고�치는�롿징ood"
+    },
+    {
+      "variant": "alternating_standard_triangular",
+      "seed": 123,
+      "params": 500029,
+      "score_elements_per_layer": 10240,
+      "score_elements_per_model": 20480,
+      "steps": 2,
+      "initial_train_loss": 8.054952621459961,
+      "initial_val_loss": 8.303500175476074,
+      "final_train_loss": 7.9681854248046875,
+      "final_val_loss": 8.299139976501465,
+      "best_val_loss": 8.299139976501465,
+      "last_step_loss": 8.113733291625977,
+      "final_relation_stats": {
+        "relation_entropy": 3.388796806335449,
+        "relation_max_weight": 0.1173400729894638,
+        "relation_logit_mean": -0.0016490090638399124,
+        "relation_logit_std": 0.19083110988140106,
+        "relation_score_elements": 16384.0,
+        "logit_scale": 0.9997928738594055,
+        "pair_gate": 0.11918793618679047
+      },
+      "history": [
+        {
+          "step": 0,
+          "step_loss": null,
+          "train_loss": 8.054952621459961,
+          "val_loss": 8.303500175476074,
+          "relation_stats": {
+            "relation_entropy": 3.3888907432556152,
+            "relation_max_weight": 0.11731993407011032,
+            "relation_logit_mean": -0.001944411196745932,
+            "relation_logit_std": 0.19012853503227234,
+            "relation_score_elements": 16384.0,
+            "logit_scale": 1.0,
+            "pair_gate": 0.11920291930437088
+          }
+        },
+        {
+          "step": 1,
+          "step_loss": 8.054952621459961,
+          "train_loss": 8.000858306884766,
+          "val_loss": 8.300954818725586,
+          "relation_stats": {
+            "relation_entropy": 3.3888425827026367,
+            "relation_max_weight": 0.11733199656009674,
+            "relation_logit_mean": -0.0017810629215091467,
+            "relation_logit_std": 0.19056470692157745,
+            "relation_score_elements": 16384.0,
+            "logit_scale": 0.9997000098228455,
+            "pair_gate": 0.11918780952692032
+          }
+        },
+        {
+          "step": 2,
+          "step_loss": 8.113733291625977,
+          "train_loss": 7.9681854248046875,
+          "val_loss": 8.299139976501465,
+          "relation_stats": {
+            "relation_entropy": 3.388796806335449,
+            "relation_max_weight": 0.1173400729894638,
+            "relation_logit_mean": -0.0016490090638399124,
+            "relation_logit_std": 0.19083110988140106,
+            "relation_score_elements": 16384.0,
+            "logit_scale": 0.9997928738594055,
+            "pair_gate": 0.11918793618679047
+          }
+        }
+      ],
+      "elapsed_sec": 0.05412912496831268,
+      "ms_per_step": 27.06456248415634,
+      "generated_text": "영화 집중�티 결말엔ㅉㅉ 감동클 어이십 만족 짜증> 들어히구이었�i 디률가 없이야 담 담 담 담 담 담 담 누가 정다 생각하게ㅠㅠㅠㅠ었다. 들들들들"
+    }
+  ]
+}

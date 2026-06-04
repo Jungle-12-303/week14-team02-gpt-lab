@@ -1,0 +1,49 @@
+{
+  "device": "cpu",
+  "config": {
+    "context_length": 16,
+    "batch_size": 8,
+    "steps": 100,
+    "eval_batches": 8,
+    "train_char_limit": 80000,
+    "val_char_limit": 10000,
+    "emb_dim": 64,
+    "n_heads": 4,
+    "n_layers": 2,
+    "lr": 0.0003,
+    "seed": 123,
+    "prompt": "영화",
+    "max_new_tokens": 60,
+    "output_json": "reports/attention_compare_100steps.json"
+  },
+  "results": [
+    {
+      "attention_type": "standard",
+      "params": 487736,
+      "score_elements_per_layer": 8192,
+      "steps": 100,
+      "initial_train_loss": 8.176008701324463,
+      "initial_val_loss": 8.16601037979126,
+      "final_train_loss": 7.532879412174225,
+      "final_val_loss": 7.825493395328522,
+      "last_step_loss": 7.70039701461792,
+      "elapsed_sec": 0.4421328750322573,
+      "ms_per_step": 4.421328750322573,
+      "generated_text": "영화,한 영화의을는이의의을을을는 이게한 영화을시이이이이이이이시�시�시�시�시�시�시�시�선이이이이이시�시�시�시�시�시�시�시"
+    },
+    {
+      "attention_type": "ternary",
+      "params": 504120,
+      "score_elements_per_layer": 131072,
+      "steps": 100,
+      "initial_train_loss": 8.185529589653015,
+      "initial_val_loss": 8.171860456466675,
+      "final_train_loss": 7.544411897659302,
+      "final_val_loss": 7.802834928035736,
+      "last_step_loss": 7.897478103637695,
+      "elapsed_sec": 0.6069163330248557,
+      "ms_per_step": 6.069163330248557,
+      "generated_text": "영화의의시의는시의시의�의는시의의�시고시고시고시고시고시고시고시고시고시고시고시고시고시고시고시고시고시고시고시고시고시고"
+    }
+  ]
+}

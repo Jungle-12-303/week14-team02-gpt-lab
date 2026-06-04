@@ -1,0 +1,4 @@
+variant,seeds,best_val_mean,best_val_std,final_val_mean,final_val_std,ms_per_step_mean,ms_per_step_std,score_elements_per_model_mean,params_mean
+triangular_final,1,8.095531463623047,0.0,8.095531463623047,0.0,75.3667920071166,0.0,32768,512322
+alternating_standard_triangular,1,8.299139976501465,0.0,8.299139976501465,0.0,27.06456248415634,0.0,20480,500029
+standard,1,8.33842658996582,0.0,8.33842658996582,0.0,84.39818752231076,0.0,8192,487736

@@ -1,0 +1,2 @@
+variant,attention_type,position_mode,seeds,best_val_mean,best_val_std,final_val_mean,final_val_std,ms_per_step_mean,ms_per_step_std,score_elements_per_model_mean,params_mean
+standard_embedding,standard,embedding,1,8.194011688232422,0.0,8.194011688232422,0.0,28.576566593255848,0.0,65536,488760

@@ -1,0 +1,511 @@
+{
+  "device": "mps",
+  "config": {
+    "context_length": 8,
+    "batch_size": 2,
+    "steps": 2,
+    "eval_every": 1,
+    "eval_batches": 1,
+    "train_char_limit": 20000,
+    "val_char_limit": 5000,
+    "emb_dim": 64,
+    "n_heads": 4,
+    "n_layers": 2,
+    "lr": 0.0003,
+    "seeds": "123",
+    "variants": "standard_embedding,triangular_embedding,alternating_embedding,standard_encoding,triangular_encoding,alternating_encoding",
+    "top_k": 4,
+    "prompt": "영화",
+    "max_new_tokens": 40,
+    "experiment_name": "Smoke position mode 6-model comparison",
+    "output_json": "reports/smoke_position_mode_6model_comparison.json",
+    "csv_path": "reports/smoke_position_mode_6model_comparison.csv",
+    "plot_path": "reports/smoke_position_mode_6model_loss_full.png",
+    "summary_csv": "reports/smoke_position_mode_6model_summary.csv",
+    "history_csv": "reports/smoke_position_mode_6model_comparison_history.csv",
+    "mean_plot_path": "reports/smoke_position_mode_6model_loss_full_mean.png",
+    "cost_quality_plot_path": "reports/smoke_position_mode_6model_loss_full_cost_quality.png",
+    "zoom_plot_path": "reports/smoke_position_mode_6model_loss_full_zoom_700.png",
+    "delta_plot_path": "reports/smoke_position_mode_6model_loss_full_delta.png",
+    "best_loss_bar_path": "reports/smoke_position_mode_6model_loss_full_best_loss_bar.png",
+    "position_effect_plot_path": "reports/smoke_position_mode_6model_loss_full_position_effect.png",
+    "relation_stats_plot_path": "reports/smoke_position_mode_6model_loss_full_relation_stats.png",
+    "final_report_md": "reports/smoke_triangular_relation_position_mode_report.md",
+    "report_md": "/Users/magik/Documents/jungle/02gpt-lab/reports/triangular_relation_research.md",
+    "append_report": true
+  },
+  "summary": [
+    {
+      "variant": "triangular_encoding",
+      "attention_type": "triangular",
+      "position_mode": "encoding",
+      "seeds": 1,
+      "best_val_mean": 7.984750270843506,
+      "best_val_std": 0.0,
+      "final_val_mean": 7.984750270843506,
+      "final_val_std": 0.0,
+      "ms_per_step_mean": 32.6492500025779,
+      "ms_per_step_std": 0.0,
+      "score_elements_per_model_mean": 2048,
+      "params_mean": 511298
+    },
+    {
+      "variant": "alternating_encoding",
+      "attention_type": "alternating",
+      "position_mode": "encoding",
+      "seeds": 1,
+      "best_val_mean": 8.068123817443848,
+      "best_val_std": 0.0,
+      "final_val_mean": 8.068123817443848,
+      "final_val_std": 0.0,
+      "ms_per_step_mean": 25.394666503416374,
+      "ms_per_step_std": 0.0,
+      "score_elements_per_model_mean": 1536,
+      "params_mean": 499005
+    },
+    {
+      "variant": "alternating_embedding",
+      "attention_type": "alternating",
+      "position_mode": "embedding",
+      "seeds": 1,
+      "best_val_mean": 8.191452026367188,
+      "best_val_std": 0.0,
+      "final_val_mean": 8.191452026367188,
+      "final_val_std": 0.0,
+      "ms_per_step_mean": 27.670916984789073,
+      "ms_per_step_std": 0.0,
+      "score_elements_per_model_mean": 1536,
+      "params_mean": 499517
+    },
+    {
+      "variant": "triangular_embedding",
+      "attention_type": "triangular",
+      "position_mode": "embedding",
+      "seeds": 1,
+      "best_val_mean": 8.246746063232422,
+      "best_val_std": 0.0,
+      "final_val_mean": 8.246746063232422,
+      "final_val_std": 0.0,
+      "ms_per_step_mean": 164.60531248594634,
+      "ms_per_step_std": 0.0,
+      "score_elements_per_model_mean": 2048,
+      "params_mean": 511810
+    },
+    {
+      "variant": "standard_encoding",
+      "attention_type": "standard",
+      "position_mode": "encoding",
+      "seeds": 1,
+      "best_val_mean": 8.252083778381348,
+      "best_val_std": 0.0,
+      "final_val_mean": 8.252083778381348,
+      "final_val_std": 0.0,
+      "ms_per_step_mean": 15.305437496863306,
+      "ms_per_step_std": 0.0,
+      "score_elements_per_model_mean": 1024,
+      "params_mean": 486712
+    },
+    {
+      "variant": "standard_embedding",
+      "attention_type": "standard",
+      "position_mode": "embedding",
+      "seeds": 1,
+      "best_val_mean": 8.497684478759766,
+      "best_val_std": 0.0,
+      "final_val_mean": 8.497684478759766,
+      "final_val_std": 0.0,
+      "ms_per_step_mean": 226.99641701183282,
+      "ms_per_step_std": 0.0,
+      "score_elements_per_model_mean": 1024,
+      "params_mean": 487224
+    }
+  ],
+  "results": [
+    {
+      "variant": "standard_embedding",
+      "seed": 123,
+      "attention_type": "standard",
+      "position_mode": "embedding",
+      "params": 487224,
+      "score_elements_per_layer": 512,
+      "score_elements_per_model": 1024,
+      "steps": 2,
+      "initial_train_loss": 7.932615280151367,
+      "initial_val_loss": 8.502657890319824,
+      "final_train_loss": 7.784998893737793,
+      "final_val_loss": 8.497684478759766,
+      "best_val_loss": 8.497684478759766,
+      "last_step_loss": 8.207836151123047,
+      "final_relation_stats": {},
+      "history": [
+        {
+          "step": 0,
+          "step_loss": null,
+          "train_loss": 7.932615280151367,
+          "val_loss": 8.502657890319824,
+          "relation_stats": {}
+        },
+        {
+          "step": 1,
+          "step_loss": 7.932615280151367,
+          "train_loss": 7.838807106018066,
+          "val_loss": 8.500397682189941,
+          "relation_stats": {}
+        },
+        {
+          "step": 2,
+          "step_loss": 8.207836151123047,
+          "train_loss": 7.784998893737793,
+          "val_loss": 8.497684478759766,
+          "relation_stats": {}
+        }
+      ],
+      "elapsed_sec": 0.45399283402366564,
+      "ms_per_step": 226.99641701183282,
+      "generated_text": "영화들이거나 하나유 꽤자 장르��� 분위�� 지루한해야심� 지루한해야심� 최고��줌��것같 최고��것같 최고��것같 최고��것같 최고��것같 최고��것같"
+    },
+    {
+      "variant": "triangular_embedding",
+      "seed": 123,
+      "attention_type": "triangular",
+      "position_mode": "embedding",
+      "params": 511810,
+      "score_elements_per_layer": 1024,
+      "score_elements_per_model": 2048,
+      "steps": 2,
+      "initial_train_loss": 8.15625,
+      "initial_val_loss": 8.250191688537598,
+      "final_train_loss": 8.014054298400879,
+      "final_val_loss": 8.246746063232422,
+      "best_val_loss": 8.246746063232422,
+      "last_step_loss": 8.160897254943848,
+      "final_relation_stats": {
+        "relation_entropy": 2.166367530822754,
+        "relation_max_weight": 0.2334427759051323,
+        "relation_logit_mean": 0.003510450740577653,
+        "relation_logit_std": 0.19448771327733994,
+        "relation_score_elements": 1024.0,
+        "logit_scale": 1.0000748038291931,
+        "pair_gate": 0.11922711879014969
+      },
+      "history": [
+        {
+          "step": 0,
+          "step_loss": null,
+          "train_loss": 8.15625,
+          "val_loss": 8.250191688537598,
+          "relation_stats": {
+            "relation_entropy": 2.166404962539673,
+            "relation_max_weight": 0.23344936221837997,
+            "relation_logit_mean": 0.0037359493144322187,
+            "relation_logit_std": 0.19412273913621902,
+            "relation_score_elements": 1024.0,
+            "logit_scale": 1.0,
+            "pair_gate": 0.11920291930437088
+          }
+        },
+        {
+          "step": 1,
+          "step_loss": 8.15625,
+          "train_loss": 8.064823150634766,
+          "val_loss": 8.249650001525879,
+          "relation_stats": {
+            "relation_entropy": 2.1663668155670166,
+            "relation_max_weight": 0.23349808901548386,
+            "relation_logit_mean": 0.0036131501256022602,
+            "relation_logit_std": 0.19440797716379166,
+            "relation_score_elements": 1024.0,
+            "logit_scale": 1.0000000298023224,
+            "pair_gate": 0.11922716721892357
+          }
+        },
+        {
+          "step": 2,
+          "step_loss": 8.160897254943848,
+          "train_loss": 8.014054298400879,
+          "val_loss": 8.246746063232422,
+          "relation_stats": {
+            "relation_entropy": 2.166367530822754,
+            "relation_max_weight": 0.2334427759051323,
+            "relation_logit_mean": 0.003510450740577653,
+            "relation_logit_std": 0.19448771327733994,
+            "relation_score_elements": 1024.0,
+            "logit_scale": 1.0000748038291931,
+            "pair_gate": 0.11922711879014969
+          }
+        }
+      ],
+      "elapsed_sec": 0.3292106249718927,
+      "ms_per_step": 164.60531248594634,
+      "generated_text": "영화͟��날�게기는마다 공포왜ㅠ 적료 적료 적 잃짜증 적 잃짜증 적 잃짜증 적료 적 잃짜증 적료 적 잃짜증 적료 적 잃짜증 적료 적"
+    },
+    {
+      "variant": "alternating_embedding",
+      "seed": 123,
+      "attention_type": "alternating",
+      "position_mode": "embedding",
+      "params": 499517,
+      "score_elements_per_layer": 768,
+      "score_elements_per_model": 1536,
+      "steps": 2,
+      "initial_train_loss": 7.9729413986206055,
+      "initial_val_loss": 8.191898345947266,
+      "final_train_loss": 7.831745147705078,
+      "final_val_loss": 8.191452026367188,
+      "best_val_loss": 8.191452026367188,
+      "last_step_loss": 8.213445663452148,
+      "final_relation_stats": {
+        "relation_entropy": 2.1656384468078613,
+        "relation_max_weight": 0.23516777157783508,
+        "relation_logit_mean": -0.007777823600918055,
+        "relation_logit_std": 0.19862136244773865,
+        "relation_score_elements": 1024.0,
+        "logit_scale": 1.0005950927734375,
+        "pair_gate": 0.11921589076519012
+      },
+      "history": [
+        {
+          "step": 0,
+          "step_loss": null,
+          "train_loss": 7.9729413986206055,
+          "val_loss": 8.191898345947266,
+          "relation_stats": {
+            "relation_entropy": 2.165597677230835,
+            "relation_max_weight": 0.23506397008895874,
+            "relation_logit_mean": -0.006111526861786842,
+            "relation_logit_std": 0.19893689453601837,
+            "relation_score_elements": 1024.0,
+            "logit_scale": 1.0,
+            "pair_gate": 0.11920291930437088
+          }
+        },
+        {
+          "step": 1,
+          "step_loss": 7.9729413986206055,
+          "train_loss": 7.881927967071533,
+          "val_loss": 8.193723678588867,
+          "relation_stats": {
+            "relation_entropy": 2.165658950805664,
+            "relation_max_weight": 0.23506346344947815,
+            "relation_logit_mean": -0.007778290193527937,
+            "relation_logit_std": 0.19847612082958221,
+            "relation_score_elements": 1024.0,
+            "logit_scale": 1.0003000497817993,
+            "pair_gate": 0.11920355260372162
+          }
+        },
+        {
+          "step": 2,
+          "step_loss": 8.213445663452148,
+          "train_loss": 7.831745147705078,
+          "val_loss": 8.191452026367188,
+          "relation_stats": {
+            "relation_entropy": 2.1656384468078613,
+            "relation_max_weight": 0.23516777157783508,
+            "relation_logit_mean": -0.007777823600918055,
+            "relation_logit_std": 0.19862136244773865,
+            "relation_score_elements": 1024.0,
+            "logit_scale": 1.0005950927734375,
+            "pair_gate": 0.11921589076519012
+          }
+        }
+      ],
+      "elapsed_sec": 0.05534183396957815,
+      "ms_per_step": 27.670916984789073,
+      "generated_text": "영화라니 정도로루자체 �웠 보여 ~습니다.  잘 봤임 어요.�습니다. 데� 알게 감독의중�로�이습니다. 데� 알게 �-중�로�이습니다. 데� 알게 감독의중�로�이습니다. 데"
+    },
+    {
+      "variant": "standard_encoding",
+      "seed": 123,
+      "attention_type": "standard",
+      "position_mode": "encoding",
+      "params": 486712,
+      "score_elements_per_layer": 512,
+      "score_elements_per_model": 1024,
+      "steps": 2,
+      "initial_train_loss": 8.08226203918457,
+      "initial_val_loss": 8.256385803222656,
+      "final_train_loss": 7.912335395812988,
+      "final_val_loss": 8.252083778381348,
+      "best_val_loss": 8.252083778381348,
+      "last_step_loss": 8.290143966674805,
+      "final_relation_stats": {},
+      "history": [
+        {
+          "step": 0,
+          "step_loss": null,
+          "train_loss": 8.08226203918457,
+          "val_loss": 8.256385803222656,
+          "relation_stats": {}
+        },
+        {
+          "step": 1,
+          "step_loss": 8.08226203918457,
+          "train_loss": 7.973261833190918,
+          "val_loss": 8.255508422851562,
+          "relation_stats": {}
+        },
+        {
+          "step": 2,
+          "step_loss": 8.290143966674805,
+          "train_loss": 7.912335395812988,
+          "val_loss": 8.252083778381348,
+          "relation_stats": {}
+        }
+      ],
+      "elapsed_sec": 0.03061087499372661,
+      "ms_per_step": 15.305437496863306,
+      "generated_text": "영화프건가 삶해요호� 훨씬 계속� 묘 정신 존 마음이�전 존편이코미디 높부범;;;드라마습니다?? 불�없 뒤 공;;;드라마습니다?? 불�없 뒤 공;;;드라마습니다??"
+    },
+    {
+      "variant": "triangular_encoding",
+      "seed": 123,
+      "attention_type": "triangular",
+      "position_mode": "encoding",
+      "params": 511298,
+      "score_elements_per_layer": 1024,
+      "score_elements_per_model": 2048,
+      "steps": 2,
+      "initial_train_loss": 8.072376251220703,
+      "initial_val_loss": 7.986456871032715,
+      "final_train_loss": 7.91422700881958,
+      "final_val_loss": 7.984750270843506,
+      "best_val_loss": 7.984750270843506,
+      "last_step_loss": 8.164400100708008,
+      "final_relation_stats": {
+        "relation_entropy": 2.168156147003174,
+        "relation_max_weight": 0.23330891877412796,
+        "relation_logit_mean": 0.0032760826870799065,
+        "relation_logit_std": 0.18591295927762985,
+        "relation_score_elements": 1024.0,
+        "logit_scale": 1.0005943179130554,
+        "pair_gate": 0.11922375112771988
+      },
+      "history": [
+        {
+          "step": 0,
+          "step_loss": null,
+          "train_loss": 8.072376251220703,
+          "val_loss": 7.986456871032715,
+          "relation_stats": {
+            "relation_entropy": 2.1681935787200928,
+            "relation_max_weight": 0.23329243063926697,
+            "relation_logit_mean": 0.004125032806769013,
+            "relation_logit_std": 0.18574506044387817,
+            "relation_score_elements": 1024.0,
+            "logit_scale": 1.0,
+            "pair_gate": 0.11920291930437088
+          }
+        },
+        {
+          "step": 1,
+          "step_loss": 8.072376251220703,
+          "train_loss": 7.97289514541626,
+          "val_loss": 7.9862961769104,
+          "relation_stats": {
+            "relation_entropy": 2.168166399002075,
+            "relation_max_weight": 0.23330091685056686,
+            "relation_logit_mean": 0.0035336624132469296,
+            "relation_logit_std": 0.1858922466635704,
+            "relation_score_elements": 1024.0,
+            "logit_scale": 1.0003000497817993,
+            "pair_gate": 0.11921143159270287
+          }
+        },
+        {
+          "step": 2,
+          "step_loss": 8.164400100708008,
+          "train_loss": 7.91422700881958,
+          "val_loss": 7.984750270843506,
+          "relation_stats": {
+            "relation_entropy": 2.168156147003174,
+            "relation_max_weight": 0.23330891877412796,
+            "relation_logit_mean": 0.0032760826870799065,
+            "relation_logit_std": 0.18591295927762985,
+            "relation_score_elements": 1024.0,
+            "logit_scale": 1.0005943179130554,
+            "pair_gate": 0.11922375112771988
+          }
+        }
+      ],
+      "elapsed_sec": 0.0652985000051558,
+      "ms_per_step": 32.6492500025779,
+      "generated_text": "영화��글는 없계�네.추천.....먑에oo흥추천 실화�더문 영화로\r내용텐데 묻 재밌을수픔oo흥 캐릭터다시�지 않 열�잼 부족\u0004 임�잼 부족\u0004 임 기 재밌"
+    },
+    {
+      "variant": "alternating_encoding",
+      "seed": 123,
+      "attention_type": "alternating",
+      "position_mode": "encoding",
+      "params": 499005,
+      "score_elements_per_layer": 768,
+      "score_elements_per_model": 1536,
+      "steps": 2,
+      "initial_train_loss": 8.228574752807617,
+      "initial_val_loss": 8.070758819580078,
+      "final_train_loss": 8.053651809692383,
+      "final_val_loss": 8.068123817443848,
+      "best_val_loss": 8.068123817443848,
+      "last_step_loss": 8.021369934082031,
+      "final_relation_stats": {
+        "relation_entropy": 2.165034770965576,
+        "relation_max_weight": 0.2335035502910614,
+        "relation_logit_mean": -0.013348300009965897,
+        "relation_logit_std": 0.2136923223733902,
+        "relation_score_elements": 1024.0,
+        "logit_scale": 1.0001627206802368,
+        "pair_gate": 0.11917407065629959
+      },
+      "history": [
+        {
+          "step": 0,
+          "step_loss": null,
+          "train_loss": 8.228574752807617,
+          "val_loss": 8.070758819580078,
+          "relation_stats": {
+            "relation_entropy": 2.16519832611084,
+            "relation_max_weight": 0.2334994375705719,
+            "relation_logit_mean": -0.009805938228964806,
+            "relation_logit_std": 0.21413476765155792,
+            "relation_score_elements": 1024.0,
+            "logit_scale": 1.0,
+            "pair_gate": 0.11920291930437088
+          }
+        },
+        {
+          "step": 1,
+          "step_loss": 8.228574752807617,
+          "train_loss": 8.117931365966797,
+          "val_loss": 8.071264266967773,
+          "relation_stats": {
+            "relation_entropy": 2.165154218673706,
+            "relation_max_weight": 0.2335382103919983,
+            "relation_logit_mean": -0.010283940471708775,
+            "relation_logit_std": 0.2144848108291626,
+            "relation_score_elements": 1024.0,
+            "logit_scale": 1.0003000497817993,
+            "pair_gate": 0.11918780207633972
+          }
+        },
+        {
+          "step": 2,
+          "step_loss": 8.021369934082031,
+          "train_loss": 8.053651809692383,
+          "val_loss": 8.068123817443848,
+          "relation_stats": {
+            "relation_entropy": 2.165034770965576,
+            "relation_max_weight": 0.2335035502910614,
+            "relation_logit_mean": -0.013348300009965897,
+            "relation_logit_std": 0.2136923223733902,
+            "relation_score_elements": 1024.0,
+            "logit_scale": 1.0001627206802368,
+            "pair_gate": 0.11917407065629959
+          }
+        }
+      ],
+      "elapsed_sec": 0.05078933300683275,
+      "ms_per_step": 25.394666503416374,
+      "generated_text": "영화�좋 감사� 잠 얼마나쟁이가무슨계�히 책랜만에투 아무리�은 이건 무엇 이야기er 할롭왕 이름이라니는건 기 소��� 다은 이건 무엇 이야기er판 불"
+    }
+  ]
+}

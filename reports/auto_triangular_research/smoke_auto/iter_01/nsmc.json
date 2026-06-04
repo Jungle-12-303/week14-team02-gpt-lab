@@ -1,0 +1,137 @@
+{
+  "device": "mps",
+  "config": {
+    "context_length": 16,
+    "batch_size": 4,
+    "steps": 2,
+    "eval_every": 1,
+    "eval_batches": 1,
+    "train_char_limit": 2000,
+    "val_char_limit": 1000,
+    "emb_dim": 64,
+    "n_heads": 4,
+    "n_layers": 2,
+    "lr": 0.0003,
+    "seeds": "123",
+    "variants": "standard,triangular_v2_scaled",
+    "top_k": 16,
+    "prompt": "영화",
+    "max_new_tokens": 40,
+    "experiment_name": "Auto smoke_auto NSMC iteration 1",
+    "output_json": "/Users/magik/Documents/jungle/02gpt-lab/reports/auto_triangular_research/smoke_auto/iter_01/nsmc.json",
+    "csv_path": "/Users/magik/Documents/jungle/02gpt-lab/reports/auto_triangular_research/smoke_auto/iter_01/nsmc.csv",
+    "plot_path": "/Users/magik/Documents/jungle/02gpt-lab/reports/auto_triangular_research/smoke_auto/iter_01/nsmc_loss.png",
+    "report_md": "/Users/magik/Documents/jungle/02gpt-lab/reports/triangular_relation_research.md",
+    "append_report": true
+  },
+  "results": [
+    {
+      "variant": "standard",
+      "seed": 123,
+      "params": 487736,
+      "score_elements_per_layer": 4096,
+      "steps": 2,
+      "initial_train_loss": 8.19678783416748,
+      "initial_val_loss": 8.34025764465332,
+      "final_train_loss": 8.111846923828125,
+      "final_val_loss": 8.33842658996582,
+      "best_val_loss": 8.33842658996582,
+      "last_step_loss": 8.149249076843262,
+      "final_relation_stats": {},
+      "history": [
+        {
+          "step": 0,
+          "step_loss": null,
+          "train_loss": 8.19678783416748,
+          "val_loss": 8.34025764465332,
+          "relation_stats": {}
+        },
+        {
+          "step": 1,
+          "step_loss": 8.19678783416748,
+          "train_loss": 8.1432523727417,
+          "val_loss": 8.339228630065918,
+          "relation_stats": {}
+        },
+        {
+          "step": 2,
+          "step_loss": 8.149249076843262,
+          "train_loss": 8.111846923828125,
+          "val_loss": 8.33842658996582,
+          "relation_stats": {}
+        }
+      ],
+      "elapsed_sec": 0.14495725004235283,
+      "ms_per_step": 72.47862502117641,
+      "generated_text": "영화 커중간길래정말혜 역 언�링� 만든함.틱��도 코A다는지 않은것 상상도 없필쁘[�연히필쁘[�연히필쁘[�연히필쁘[�연히"
+    },
+    {
+      "variant": "triangular_v2_scaled",
+      "seed": 123,
+      "params": 504122,
+      "score_elements_per_layer": 65536,
+      "steps": 2,
+      "initial_train_loss": 8.093571662902832,
+      "initial_val_loss": 8.176464080810547,
+      "final_train_loss": 8.008708953857422,
+      "final_val_loss": 8.173701286315918,
+      "best_val_loss": 8.173701286315918,
+      "last_step_loss": 8.129684448242188,
+      "final_relation_stats": {
+        "relation_entropy": 3.816367745399475,
+        "relation_max_weight": 0.11135348677635193,
+        "relation_logit_mean": -0.00043575293966569006,
+        "relation_logit_std": 0.1993725672364235,
+        "relation_score_elements": 65536.0,
+        "logit_scale": 1.0004807710647583
+      },
+      "history": [
+        {
+          "step": 0,
+          "step_loss": null,
+          "train_loss": 8.093571662902832,
+          "val_loss": 8.176464080810547,
+          "relation_stats": {
+            "relation_entropy": 3.816432237625122,
+            "relation_max_weight": 0.11131982505321503,
+            "relation_logit_mean": -0.0004081346851307899,
+            "relation_logit_std": 0.1991111859679222,
+            "relation_score_elements": 65536.0,
+            "logit_scale": 1.0
+          }
+        },
+        {
+          "step": 1,
+          "step_loss": 8.093571662902832,
+          "train_loss": 8.040377616882324,
+          "val_loss": 8.175339698791504,
+          "relation_stats": {
+            "relation_entropy": 3.8163989782333374,
+            "relation_max_weight": 0.11133918911218643,
+            "relation_logit_mean": -0.00042862867121584713,
+            "relation_logit_std": 0.1992288902401924,
+            "relation_score_elements": 65536.0,
+            "logit_scale": 1.0003000497817993
+          }
+        },
+        {
+          "step": 2,
+          "step_loss": 8.129684448242188,
+          "train_loss": 8.008708953857422,
+          "val_loss": 8.173701286315918,
+          "relation_stats": {
+            "relation_entropy": 3.816367745399475,
+            "relation_max_weight": 0.11135348677635193,
+            "relation_logit_mean": -0.00043575293966569006,
+            "relation_logit_std": 0.1993725672364235,
+            "relation_score_elements": 65536.0,
+            "logit_scale": 1.0004807710647583
+          }
+        }
+      ],
+      "elapsed_sec": 0.13608754199231043,
+      "ms_per_step": 68.04377099615522,
+      "generated_text": "영화딩 짱다는 �.. �곤��9 여운이다가;  뻔�� 설�진진�했는데 크복함  좋았트신이쯤했는데 크�� 적) 수작듯 크�� 적) 수작듯 크��"
+    }
+  ]
+}

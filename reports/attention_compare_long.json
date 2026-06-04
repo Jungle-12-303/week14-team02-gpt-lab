@@ -1,0 +1,187 @@
+{
+  "device": "cpu",
+  "config": {
+    "context_length": 32,
+    "batch_size": 8,
+    "steps": 1000,
+    "eval_every": 100,
+    "eval_batches": 8,
+    "train_char_limit": 1000000,
+    "val_char_limit": 100000,
+    "emb_dim": 64,
+    "n_heads": 4,
+    "n_layers": 2,
+    "lr": 0.0003,
+    "seed": 123,
+    "prompt": "영화",
+    "max_new_tokens": 80,
+    "output_json": "reports/attention_compare_long.json",
+    "plot_path": "reports/attention_compare_long_loss.png"
+  },
+  "results": [
+    {
+      "attention_type": "standard",
+      "params": 488760,
+      "score_elements_per_layer": 32768,
+      "steps": 1000,
+      "initial_train_loss": 8.166137099266052,
+      "initial_val_loss": 8.178331851959229,
+      "final_train_loss": 7.282123625278473,
+      "final_val_loss": 7.313291907310486,
+      "last_step_loss": 7.32124662399292,
+      "history": [
+        {
+          "step": 0,
+          "step_loss": null,
+          "train_loss": 8.166137099266052,
+          "val_loss": 8.178331851959229
+        },
+        {
+          "step": 100,
+          "step_loss": 7.696542739868164,
+          "train_loss": 7.598222315311432,
+          "val_loss": 7.73482358455658
+        },
+        {
+          "step": 200,
+          "step_loss": 7.509474754333496,
+          "train_loss": 7.326899468898773,
+          "val_loss": 7.420901536941528
+        },
+        {
+          "step": 300,
+          "step_loss": 7.371160507202148,
+          "train_loss": 7.265709102153778,
+          "val_loss": 7.347347557544708
+        },
+        {
+          "step": 400,
+          "step_loss": 7.229030132293701,
+          "train_loss": 7.262232005596161,
+          "val_loss": 7.334474563598633
+        },
+        {
+          "step": 500,
+          "step_loss": 7.28967809677124,
+          "train_loss": 7.266598999500275,
+          "val_loss": 7.322669148445129
+        },
+        {
+          "step": 600,
+          "step_loss": 7.354626178741455,
+          "train_loss": 7.273408055305481,
+          "val_loss": 7.322744786739349
+        },
+        {
+          "step": 700,
+          "step_loss": 7.342477798461914,
+          "train_loss": 7.27957820892334,
+          "val_loss": 7.316488802433014
+        },
+        {
+          "step": 800,
+          "step_loss": 7.329743385314941,
+          "train_loss": 7.281124293804169,
+          "val_loss": 7.316735208034515
+        },
+        {
+          "step": 900,
+          "step_loss": 7.232278347015381,
+          "train_loss": 7.279452443122864,
+          "val_loss": 7.311526000499725
+        },
+        {
+          "step": 1000,
+          "step_loss": 7.32124662399292,
+          "train_loss": 7.282123625278473,
+          "val_loss": 7.313291907310486
+        }
+      ],
+      "elapsed_sec": 7.320983165991493,
+      "ms_per_step": 7.320983165991493,
+      "generated_text": "영화이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이"
+    },
+    {
+      "attention_type": "ternary",
+      "params": 505144,
+      "score_elements_per_layer": 1048576,
+      "steps": 1000,
+      "initial_train_loss": 8.167160034179688,
+      "initial_val_loss": 8.159859895706177,
+      "final_train_loss": 7.28026556968689,
+      "final_val_loss": 7.309834837913513,
+      "last_step_loss": 7.315039157867432,
+      "history": [
+        {
+          "step": 0,
+          "step_loss": null,
+          "train_loss": 8.167160034179688,
+          "val_loss": 8.159859895706177
+        },
+        {
+          "step": 100,
+          "step_loss": 7.675638675689697,
+          "train_loss": 7.575852930545807,
+          "val_loss": 7.721454560756683
+        },
+        {
+          "step": 200,
+          "step_loss": 7.492713451385498,
+          "train_loss": 7.310471057891846,
+          "val_loss": 7.414756774902344
+        },
+        {
+          "step": 300,
+          "step_loss": 7.3613715171813965,
+          "train_loss": 7.257808148860931,
+          "val_loss": 7.3492958545684814
+        },
+        {
+          "step": 400,
+          "step_loss": 7.219058036804199,
+          "train_loss": 7.2557572722435,
+          "val_loss": 7.334438145160675
+        },
+        {
+          "step": 500,
+          "step_loss": 7.295839786529541,
+          "train_loss": 7.264445662498474,
+          "val_loss": 7.322881400585175
+        },
+        {
+          "step": 600,
+          "step_loss": 7.35390567779541,
+          "train_loss": 7.272904813289642,
+          "val_loss": 7.3246331214904785
+        },
+        {
+          "step": 700,
+          "step_loss": 7.352079391479492,
+          "train_loss": 7.2802852392196655,
+          "val_loss": 7.315474689006805
+        },
+        {
+          "step": 800,
+          "step_loss": 7.3124098777771,
+          "train_loss": 7.281337082386017,
+          "val_loss": 7.3148064613342285
+        },
+        {
+          "step": 900,
+          "step_loss": 7.234428405761719,
+          "train_loss": 7.2782883644104,
+          "val_loss": 7.310974478721619
+        },
+        {
+          "step": 1000,
+          "step_loss": 7.315039157867432,
+          "train_loss": 7.28026556968689,
+          "val_loss": 7.309834837913513
+        }
+      ],
+      "elapsed_sec": 17.367905292019714,
+      "ms_per_step": 17.367905292019714,
+      "generated_text": "영화이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이"
+    }
+  ]
+}

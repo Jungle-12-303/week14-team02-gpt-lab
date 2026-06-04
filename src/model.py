@@ -6,10 +6,14 @@ import torch.nn as nn
 import math
 
 try:
-    from .attention import MultiHeadAttention
+    from .attention import (
+        MultiHeadAttention,
+        TernaryRelationAttention,
+        TriangularRelationAttention,
+    )
     from .embeddings import InputEmbedding
 except ImportError:
-    from attention import MultiHeadAttention
+    from attention import MultiHeadAttention, TernaryRelationAttention, TriangularRelationAttention
     from embeddings import InputEmbedding
 
 
@@ -65,10 +69,35 @@ class TransformerBlock(nn.Module):
         n_heads: int,
         drop_rate: float = 0.1,
         qkv_bias: bool = False,
+        attention_type: str = "standard",
+        triangular_value_mode: str = "marginal",
+        triangular_logit_scale: str = "fixed",
+        triangular_candidate_mode: str = "full",
+        triangular_top_k: int = 16,
     ):
         super().__init__()
         # TODO: attention, ffn, layernorm, dropout을 정의하세요.
-        self.attention = MultiHeadAttention(d_model=d_model, n_heads=n_heads, drop_rate=drop_rate, qkv_bias=qkv_bias)
+        if attention_type == "standard":
+            attention_cls = MultiHeadAttention
+            attention_kwargs = {}
+        elif attention_type in {"triangular", "ternary"}:
+            attention_cls = TriangularRelationAttention
+            attention_kwargs = {
+                "value_mode": triangular_value_mode,
+                "logit_scale": triangular_logit_scale,
+                "candidate_mode": triangular_candidate_mode,
+                "top_k": triangular_top_k,
+            }
+        else:
+            raise ValueError(f"unknown attention_type: {attention_type}")
+
+        self.attention = attention_cls(
+            d_model=d_model,
+            n_heads=n_heads,
+            drop_rate=drop_rate,
+            qkv_bias=qkv_bias,
+            **attention_kwargs,
+        )
         self.ffn = FeedForward(d_model=d_model, dropout=drop_rate)
         self.norm1 = LayerNorm(normalized_shape=d_model)
         self.norm2 = LayerNorm(normalized_shape=d_model)
@@ -96,12 +125,21 @@ class GPTModel(nn.Module):
     def __init__(self, config: dict):
         super().__init__()
         self.config = config
+        attention_type = config.get("attention_type", "standard")
+        triangular_value_mode = config.get("triangular_value_mode", "marginal")
+        triangular_logit_scale = config.get("triangular_logit_scale", "fixed")
+        triangular_candidate_mode = config.get("triangular_candidate_mode", "full")
+        triangular_top_k = config.get("triangular_top_k", 16)
+        position_mode = config.get("position_mode", "embedding")
+        if attention_type == "alternating" and config["n_layers"] < 2:
+            raise ValueError("alternating attention requires at least 2 layers")
         # TODO: embedding, blocks, final layernorm, lm_head를 정의하세요.
         self.embedding = InputEmbedding(
             vocab_size=config["vocab_size"],
             emb_dim=config["emb_dim"],
             context_length=config["context_length"],
             drop_rate=config["drop_rate"],
+            position_mode=position_mode,
         )
 
         self.blocks = nn.Sequential(
@@ -110,7 +148,18 @@ class GPTModel(nn.Module):
                 n_heads=config["n_heads"],
                 drop_rate=config["drop_rate"],
                 qkv_bias=config["qkv_bias"],
-            ) for _ in range(config["n_layers"])]
+                attention_type=(
+                    "standard"
+                    if attention_type == "alternating" and layer_idx % 2 == 0
+                    else "triangular"
+                    if attention_type == "alternating"
+                    else attention_type
+                ),
+                triangular_value_mode=triangular_value_mode,
+                triangular_logit_scale=triangular_logit_scale,
+                triangular_candidate_mode=triangular_candidate_mode,
+                triangular_top_k=triangular_top_k,
+            ) for layer_idx in range(config["n_layers"])]
         )
 
         # forward에서 causal_mask를 명시적으로 넘기기 위해 추천

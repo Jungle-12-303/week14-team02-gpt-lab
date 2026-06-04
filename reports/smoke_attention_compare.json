@@ -1,0 +1,341 @@
+{
+  "device": "mps",
+  "config": {
+    "context_length": 16,
+    "batch_size": 4,
+    "steps": 2,
+    "eval_every": 1,
+    "eval_batches": 1,
+    "train_char_limit": 2000,
+    "val_char_limit": 1000,
+    "emb_dim": 64,
+    "n_heads": 4,
+    "n_layers": 2,
+    "lr": 0.0003,
+    "seeds": "123",
+    "variants": "standard,triangular_v0,triangular_v1_pair_value,triangular_v2_scaled,triangular_v3_topk",
+    "top_k": 4,
+    "prompt": "영화",
+    "max_new_tokens": 40,
+    "experiment_name": "NSMC LM",
+    "output_json": "reports/smoke_attention_compare.json",
+    "csv_path": "reports/smoke_attention_compare.csv",
+    "plot_path": "reports/smoke_attention_compare.png",
+    "report_md": "/Users/magik/Documents/jungle/02gpt-lab/reports/triangular_relation_research.md",
+    "append_report": false
+  },
+  "results": [
+    {
+      "variant": "standard",
+      "seed": 123,
+      "params": 487736,
+      "score_elements_per_layer": 4096,
+      "steps": 2,
+      "initial_train_loss": 8.19678783416748,
+      "initial_val_loss": 8.34025764465332,
+      "final_train_loss": 8.111846923828125,
+      "final_val_loss": 8.33842658996582,
+      "best_val_loss": 8.33842658996582,
+      "last_step_loss": 8.149249076843262,
+      "final_relation_stats": {},
+      "history": [
+        {
+          "step": 0,
+          "step_loss": null,
+          "train_loss": 8.19678783416748,
+          "val_loss": 8.34025764465332,
+          "relation_stats": {}
+        },
+        {
+          "step": 1,
+          "step_loss": 8.19678783416748,
+          "train_loss": 8.1432523727417,
+          "val_loss": 8.339228630065918,
+          "relation_stats": {}
+        },
+        {
+          "step": 2,
+          "step_loss": 8.149249076843262,
+          "train_loss": 8.111846923828125,
+          "val_loss": 8.33842658996582,
+          "relation_stats": {}
+        }
+      ],
+      "elapsed_sec": 1.4247887500096112,
+      "ms_per_step": 712.3943750048056,
+      "generated_text": "영화 커중간길래정말혜 역 언�링� 만든함.틱��도 코A다는지 않은것 상상도 없필쁘[�연히필쁘[�연히필쁘[�연히필쁘[�연히"
+    },
+    {
+      "variant": "triangular_v0",
+      "seed": 123,
+      "params": 504120,
+      "score_elements_per_layer": 65536,
+      "steps": 2,
+      "initial_train_loss": 8.098770141601562,
+      "initial_val_loss": 8.175610542297363,
+      "final_train_loss": 8.015856742858887,
+      "final_val_loss": 8.172710418701172,
+      "best_val_loss": 8.172710418701172,
+      "last_step_loss": 8.127307891845703,
+      "final_relation_stats": {
+        "relation_entropy": 3.8162940740585327,
+        "relation_max_weight": 0.11145459860563278,
+        "relation_logit_mean": -0.00036465207813307643,
+        "relation_logit_std": 0.1994384229183197,
+        "relation_score_elements": 65536.0,
+        "logit_scale": 1.0
+      },
+      "history": [
+        {
+          "step": 0,
+          "step_loss": null,
+          "train_loss": 8.098770141601562,
+          "val_loss": 8.175610542297363,
+          "relation_stats": {
+            "relation_entropy": 3.8163572549819946,
+            "relation_max_weight": 0.11140703037381172,
+            "relation_logit_mean": -0.0003658283094409853,
+            "relation_logit_std": 0.19925784319639206,
+            "relation_score_elements": 65536.0,
+            "logit_scale": 1.0
+          }
+        },
+        {
+          "step": 1,
+          "step_loss": 8.098770141601562,
+          "train_loss": 8.046769142150879,
+          "val_loss": 8.174354553222656,
+          "relation_stats": {
+            "relation_entropy": 3.8163301944732666,
+            "relation_max_weight": 0.11142762377858162,
+            "relation_logit_mean": -0.0003674538165796548,
+            "relation_logit_std": 0.19933592528104782,
+            "relation_score_elements": 65536.0,
+            "logit_scale": 1.0
+          }
+        },
+        {
+          "step": 2,
+          "step_loss": 8.127307891845703,
+          "train_loss": 8.015856742858887,
+          "val_loss": 8.172710418701172,
+          "relation_stats": {
+            "relation_entropy": 3.8162940740585327,
+            "relation_max_weight": 0.11145459860563278,
+            "relation_logit_mean": -0.00036465207813307643,
+            "relation_logit_std": 0.1994384229183197,
+            "relation_score_elements": 65536.0,
+            "logit_scale": 1.0
+          }
+        }
+      ],
+      "elapsed_sec": 0.3275154170114547,
+      "ms_per_step": 163.75770850572735,
+      "generated_text": "영화딩 짱다는 �.. �곤��9건지�은 정말�� 연기도 잘까지호감� 무슨전쟁�네���이라.. � 시청가 있트신이 어느 것큐투했는데 크�� 적) 수작듯"
+    },
+    {
+      "variant": "triangular_v1_pair_value",
+      "seed": 123,
+      "params": 504120,
+      "score_elements_per_layer": 65536,
+      "steps": 2,
+      "initial_train_loss": 8.104150772094727,
+      "initial_val_loss": 8.18679141998291,
+      "final_train_loss": 8.023855209350586,
+      "final_val_loss": 8.18424129486084,
+      "best_val_loss": 8.18424129486084,
+      "last_step_loss": 8.129304885864258,
+      "final_relation_stats": {
+        "relation_entropy": 3.8164401054382324,
+        "relation_max_weight": 0.11138366162776947,
+        "relation_logit_mean": -0.00013111441512592137,
+        "relation_logit_std": 0.19892435520887375,
+        "relation_score_elements": 65536.0,
+        "logit_scale": 1.0
+      },
+      "history": [
+        {
+          "step": 0,
+          "step_loss": null,
+          "train_loss": 8.104150772094727,
+          "val_loss": 8.18679141998291,
+          "relation_stats": {
+            "relation_entropy": 3.8164502382278442,
+            "relation_max_weight": 0.11136829853057861,
+            "relation_logit_mean": -0.00010858476161956787,
+            "relation_logit_std": 0.19886157661676407,
+            "relation_score_elements": 65536.0,
+            "logit_scale": 1.0
+          }
+        },
+        {
+          "step": 1,
+          "step_loss": 8.104150772094727,
+          "train_loss": 8.053874969482422,
+          "val_loss": 8.185799598693848,
+          "relation_stats": {
+            "relation_entropy": 3.8164368867874146,
+            "relation_max_weight": 0.11138758808374405,
+            "relation_logit_mean": -0.00012864288873970509,
+            "relation_logit_std": 0.19889873266220093,
+            "relation_score_elements": 65536.0,
+            "logit_scale": 1.0
+          }
+        },
+        {
+          "step": 2,
+          "step_loss": 8.129304885864258,
+          "train_loss": 8.023855209350586,
+          "val_loss": 8.18424129486084,
+          "relation_stats": {
+            "relation_entropy": 3.8164401054382324,
+            "relation_max_weight": 0.11138366162776947,
+            "relation_logit_mean": -0.00013111441512592137,
+            "relation_logit_std": 0.19892435520887375,
+            "relation_score_elements": 65536.0,
+            "logit_scale": 1.0
+          }
+        }
+      ],
+      "elapsed_sec": 0.26175241597229615,
+      "ms_per_step": 130.87620798614807,
+      "generated_text": "영화 다큐지않��학 나오는� 지 �남�� 졸�잔;임 적) 수작듯 크�� 적) 수작듯 크�� 적) 수작듯 크�� 적) 수작듯 크�� 적"
+    },
+    {
+      "variant": "triangular_v2_scaled",
+      "seed": 123,
+      "params": 504122,
+      "score_elements_per_layer": 65536,
+      "steps": 2,
+      "initial_train_loss": 8.104150772094727,
+      "initial_val_loss": 8.18679141998291,
+      "final_train_loss": 8.023853302001953,
+      "final_val_loss": 8.18424129486084,
+      "best_val_loss": 8.18424129486084,
+      "last_step_loss": 8.129304885864258,
+      "final_relation_stats": {
+        "relation_entropy": 3.816425323486328,
+        "relation_max_weight": 0.11138975620269775,
+        "relation_logit_mean": -0.00013110993313603103,
+        "relation_logit_std": 0.19901027530431747,
+        "relation_score_elements": 65536.0,
+        "logit_scale": 1.00043123960495
+      },
+      "history": [
+        {
+          "step": 0,
+          "step_loss": null,
+          "train_loss": 8.104150772094727,
+          "val_loss": 8.18679141998291,
+          "relation_stats": {
+            "relation_entropy": 3.8164502382278442,
+            "relation_max_weight": 0.11136829853057861,
+            "relation_logit_mean": -0.00010858476161956787,
+            "relation_logit_std": 0.19886157661676407,
+            "relation_score_elements": 65536.0,
+            "logit_scale": 1.0
+          }
+        },
+        {
+          "step": 1,
+          "step_loss": 8.104150772094727,
+          "train_loss": 8.053874969482422,
+          "val_loss": 8.185800552368164,
+          "relation_stats": {
+            "relation_entropy": 3.8164262771606445,
+            "relation_max_weight": 0.1113918349146843,
+            "relation_logit_mean": -0.00012868005433119833,
+            "relation_logit_std": 0.1989584043622017,
+            "relation_score_elements": 65536.0,
+            "logit_scale": 1.0003000497817993
+          }
+        },
+        {
+          "step": 2,
+          "step_loss": 8.129304885864258,
+          "train_loss": 8.023853302001953,
+          "val_loss": 8.18424129486084,
+          "relation_stats": {
+            "relation_entropy": 3.816425323486328,
+            "relation_max_weight": 0.11138975620269775,
+            "relation_logit_mean": -0.00013110993313603103,
+            "relation_logit_std": 0.19901027530431747,
+            "relation_score_elements": 65536.0,
+            "logit_scale": 1.00043123960495
+          }
+        }
+      ],
+      "elapsed_sec": 0.2243718749959953,
+      "ms_per_step": 112.18593749799766,
+      "generated_text": "영화 다큐지않��학 나오는� 지 �남�� 졸�잔;임 적) 수작듯 크�� 적) 수작듯 크�� 적) 수작듯 크�� 적) 수작듯 크�� 적"
+    },
+    {
+      "variant": "triangular_v3_topk",
+      "seed": 123,
+      "params": 512314,
+      "score_elements_per_layer": 4096,
+      "steps": 2,
+      "initial_train_loss": 8.176162719726562,
+      "initial_val_loss": 8.093535423278809,
+      "final_train_loss": 8.096735000610352,
+      "final_val_loss": 8.092691421508789,
+      "best_val_loss": 8.092691421508789,
+      "last_step_loss": 8.22120475769043,
+      "final_relation_stats": {
+        "relation_entropy": 2.4602644443511963,
+        "relation_max_weight": 0.16063028573989868,
+        "relation_logit_mean": 0.0008528009057044983,
+        "relation_logit_std": 0.19864393025636673,
+        "relation_score_elements": 4096.0,
+        "logit_scale": 1.0000057518482208
+      },
+      "history": [
+        {
+          "step": 0,
+          "step_loss": null,
+          "train_loss": 8.176162719726562,
+          "val_loss": 8.093535423278809,
+          "relation_stats": {
+            "relation_entropy": 2.4602081775665283,
+            "relation_max_weight": 0.16072824597358704,
+            "relation_logit_mean": 0.0010995607590302825,
+            "relation_logit_std": 0.19887986779212952,
+            "relation_score_elements": 4096.0,
+            "logit_scale": 1.0
+          }
+        },
+        {
+          "step": 1,
+          "step_loss": 8.176162719726562,
+          "train_loss": 8.126522064208984,
+          "val_loss": 8.093283653259277,
+          "relation_stats": {
+            "relation_entropy": 2.460258960723877,
+            "relation_max_weight": 0.16062366217374802,
+            "relation_logit_mean": 0.000938786193728447,
+            "relation_logit_std": 0.19871386140584946,
+            "relation_score_elements": 4096.0,
+            "logit_scale": 1.0000000298023224
+          }
+        },
+        {
+          "step": 2,
+          "step_loss": 8.22120475769043,
+          "train_loss": 8.096735000610352,
+          "val_loss": 8.092691421508789,
+          "relation_stats": {
+            "relation_entropy": 2.4602644443511963,
+            "relation_max_weight": 0.16063028573989868,
+            "relation_logit_mean": 0.0008528009057044983,
+            "relation_logit_std": 0.19864393025636673,
+            "relation_score_elements": 4096.0,
+            "logit_scale": 1.0000057518482208
+          }
+        }
+      ],
+      "elapsed_sec": 0.37011183297727257,
+      "ms_per_step": 185.05591648863629,
+      "generated_text": "영화하지만ㄱ 해야 바��론가��쓰레기�� 장난텐데\f나리오영화. 길� 기짜증했는데암� 기짜증했는데암� 기짜증했는데암� 기짜증했는데암� 기짜증했는데암"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+variant,attention_type,position_mode,seeds,best_val_mean,best_val_std,final_val_mean,final_val_std,ms_per_step_mean,ms_per_step_std,score_elements_per_model_mean,params_mean
+triangular_encoding,triangular,encoding,1,7.251455843448639,0.0,7.251455843448639,0.0,22.89810600000783,0.0,131072,511298
+standard_encoding,standard,encoding,1,7.260331332683563,0.0,7.260331332683563,0.0,7.707335833489196,0.0,65536,486712
+alternating_encoding,alternating,encoding,1,7.262545228004456,0.0,7.262545228004456,0.0,14.719747041497612,0.0,98304,499005
+triangular_embedding,triangular,embedding,1,7.308709800243378,0.0,7.308709800243378,0.0,22.57012889548787,0.0,131072,513346
+standard_embedding,standard,embedding,1,7.3106478452682495,0.0,7.3106478452682495,0.0,7.909740645525744,0.0,65536,488760
+alternating_embedding,alternating,embedding,1,7.310652732849121,0.0,7.310652732849121,0.0,14.966506604512688,0.0,98304,501053

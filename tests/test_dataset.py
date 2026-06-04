@@ -106,3 +106,32 @@ class TestInputEmbedding:
         except (NotImplementedError, TypeError):
             pytest.fail("InputEmbedding 미구현")
         assert out.shape == (batch_size, seq_len, emb_dim)
+
+    def test_input_embedding_encoding_mode_shape_and_buffer(self):
+        """fixed sin/cos positional encoding 모드는 buffer로 위치 정보를 제공한다."""
+        from embeddings import InputEmbedding
+
+        batch_size, seq_len = 2, 8
+        vocab_size, emb_dim, context_length = 1000, 64, 128
+        emb = InputEmbedding(
+            vocab_size,
+            emb_dim,
+            context_length,
+            drop_rate=0.0,
+            position_mode="encoding",
+        )
+        x = torch.randint(0, vocab_size, (batch_size, seq_len))
+        out = emb(x)
+
+        assert out.shape == (batch_size, seq_len, emb_dim)
+        assert hasattr(emb, "position_encoding")
+        assert emb.position_encoding.requires_grad is False
+        assert "position_encoding" in dict(emb.named_buffers())
+        assert "position_embedding.weight" not in dict(emb.named_parameters())
+
+    def test_input_embedding_invalid_position_mode(self):
+        """지원하지 않는 위치 방식은 명확히 실패해야 한다."""
+        from embeddings import InputEmbedding
+
+        with pytest.raises(ValueError, match="position_mode"):
+            InputEmbedding(1000, 64, 128, position_mode="bad")
